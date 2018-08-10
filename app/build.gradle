@@ -16,7 +16,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/2'] } }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/java/2', 'src/main/java/view/Callback', 'src/main/java/view/callback', 'src/main/java/kr/ac/korea/translator/view/callback']
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+    }
+
 }
 
 dependencies {
@@ -28,8 +37,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'gun0912.ted:tedpermission:2.1.0'
-    implementation 'com.google.apis:google-api-services-vision:v1-rev357-1.22.0' exclude module: 'httpclient'
+    implementation 'com.google.apis:google-api-services-vision:v1-rev357-1.22.0' exclude module: 'guava-jdk5'
     implementation 'com.google.http-client:google-http-client-gson:1.20.0' exclude module: 'httpclient'
-    implementation 'com.google.api-client:google-api-client-android:1.22.0' exclude module: 'httpclient'
+    implementation 'com.google.api-client:google-api-client-android:1.22.0' exclude module: 'guava-jdk5'
     implementation 'com.google.cloud:google-cloud-translate:1.35.0'
+    compileOnly "org.projectlombok:lombok:1.18.2"
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "com.squareup.retrofit2:retrofit:2.3.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
+    implementation "com.squareup.okhttp3:okhttp:3.9.0"
 }

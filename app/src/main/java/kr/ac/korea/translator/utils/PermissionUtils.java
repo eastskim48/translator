@@ -1,4 +1,4 @@
-package kr.ac.korea.translator;
+package kr.ac.korea.translator.utils;
 
 import android.Manifest;
 import android.content.Context;
