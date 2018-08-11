@@ -3,29 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@color/colorWhiteTransparent">
+    android:background="@drawable/border">
 
     <ImageView
         android:src="@drawable/ic_menu_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:background="@color/colorYellow"
         android:layout_gravity="center_vertical|center_horizontal"
         android:contentDescription="Movement Assistant"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_translate"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/ic_translate_black_24dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@null"
+        android:src="@drawable/ic_translate_black_24dp"
         android:contentDescription="Translate Button" />
 
     <ImageButton
         android:id="@+id/btn_close"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:background="@drawable/ic_close_black_24dp"
-        android:scaleType="fitCenter"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@null"
+        android:src="@drawable/ic_close_black_24dp"
         android:contentDescription="Close Button" />
 
 </LinearLayout>

@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import kr.ac.korea.translator.R;
@@ -46,7 +45,7 @@ public class TopService extends Service implements View.OnTouchListener{
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         wm.addView(vOverlay, lp);
 
-        Button btnTranslate = vOverlay.findViewById(R.id.btn_translate);
+        ImageButton btnTranslate = vOverlay.findViewById(R.id.btn_translate);
         ImageButton btnClose = vOverlay.findViewById(R.id.btn_close);
 
         btnTranslate.setOnClickListener(new View.OnClickListener() {

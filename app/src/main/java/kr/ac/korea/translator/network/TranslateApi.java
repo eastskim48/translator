@@ -1,7 +1,5 @@
 package kr.ac.korea.translator.network;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -15,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import kr.ac.korea.translator.view.main.CoverActivity;
 
 /*
  * Gson: https://github.com/google/gson
@@ -45,7 +45,7 @@ public class TranslateApi {
     static String path = "/translate?api-version=3.0";
 
     // Translate to German and Italian.
-    static String params = "&to=ko";
+    static String params;
 
     //static String text = "Hello world!";
 
@@ -82,6 +82,7 @@ public class TranslateApi {
     }
 
     public static String Translate (String text) throws Exception {
+        setLanguageParam();
         URL url = new URL (host + path + params);
         List<RequestBody> objList = new ArrayList<RequestBody>();
         objList.add(new RequestBody(text));
@@ -96,11 +97,7 @@ public class TranslateApi {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(json);
     }
-    /*
-    public static String checkString(String str){
-        String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
-        str =str.replaceAll(match, "");
-        return str;
+    public static void setLanguageParam(){
+        params="&to="+CoverActivity.getSelecteedLang();
     }
-    */
 }

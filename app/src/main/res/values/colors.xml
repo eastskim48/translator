@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="transparentBlack">#99000000</color>
     <color name="transparent">#1A000000</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="lightgray">#FFEEEEEE</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorWhiteTransparent">#FFFFFF50</color>
+    <color name="colorWhiteTransparent">#EEFFFFFF</color>
     <color name="colorYellow">#FFCC00</color>
+    <color name="transparentBlack">#99000000</color>
 </resources>

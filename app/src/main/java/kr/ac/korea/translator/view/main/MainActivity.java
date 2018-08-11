@@ -35,15 +35,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        m.put("한국어","ko");
-        m.put("영어","en");
-        m.put("일본어","ja");
-        m.put("중국어","zh-Hans");
-        m.put("독일어","de");
-        m.put("프랑스어","fr");
-        m.put("스페인어","es");
-        m.put("헝가리어","hu");
-        m.put("이탈리아어","it");
         View view = getWindow().getDecorView();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

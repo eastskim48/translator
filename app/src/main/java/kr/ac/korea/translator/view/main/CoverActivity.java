@@ -2,6 +2,7 @@ package kr.ac.korea.translator.view.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -31,7 +32,9 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import kr.ac.korea.translator.R;
 import kr.ac.korea.translator.model.Detection;
@@ -46,7 +49,6 @@ public class CoverActivity extends BaseActivity {
     private int REQUEST_CODE = 0;
     private MediaProjection mMediaProjection;
     private MediaProjectionManager mProjectionManager;
-    private static String STORE_DIRECTORY;
     private Display mDisplay;
     private int mDensity;
     ImageReader mImageReader;
@@ -57,13 +59,14 @@ public class CoverActivity extends BaseActivity {
     private int mRotation;
     public static int mWidth;
     public static int mHeight;
-    private static final String TAG = CoverActivity.class.getName();
     public Context mContext;
     public static List<TextContainer> mResult;
     public Detection r;
     public TextContainer t;
     public int count;
     RelativeLayout container;
+    public static String selectedLang;
+    private static final Map<String, String> m = new LinkedHashMap<>();
 
     public void onDestroy () {
         super.onDestroy();
@@ -81,9 +84,20 @@ public class CoverActivity extends BaseActivity {
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                finishAndRemoveTask();
             }
         });
+        m.put("한국어","ko");
+        m.put("영어","en");
+        m.put("일본어","ja");
+        m.put("중국어","zh-Hans");
+        m.put("독일어","de");
+        m.put("프랑스어","fr");
+        m.put("스페인어","es");
+        m.put("헝가리어","hu");
+        m.put("이탈리아어","it");
+        SharedPreferences sp = getSharedPreferences("LANG",MODE_PRIVATE);
+        selectedLang = m.get(sp.getString("lang","한국어"));
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
@@ -234,5 +248,8 @@ public class CoverActivity extends BaseActivity {
     }
     public interface TranslateCallback{
         void resultToScreen(List<TextContainer> result);
+    }
+    public static String getSelecteedLang(){
+        return selectedLang;
     }
 }
