@@ -20,13 +20,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/TextBlock.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/TextContainer.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -133,10 +127,10 @@
       <file leaf-file-name="TranslateApi.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="90" column="55" lean-forward="true" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
+            <state relative-caret-position="303">
+              <caret line="87" column="10" lean-forward="false" selection-start-line="87" selection-start-column="10" selection-end-line="87" selection-end-column="10" />
               <folding>
-                <element signature="e#2897#2910#0" expanded="true" />
+                <element signature="e#2864#2877#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -194,6 +188,7 @@
       <find>Post</find>
       <find>onclick</find>
       <find>Log.e</find>
+      <find>getBytes</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -3498,10 +3493,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="90" column="55" lean-forward="true" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
+        <state relative-caret-position="303">
+          <caret line="87" column="10" lean-forward="false" selection-start-line="87" selection-start-column="10" selection-end-line="87" selection-end-column="10" />
           <folding>
-            <element signature="e#2897#2910#0" expanded="true" />
+            <element signature="e#2864#2877#0" expanded="true" />
           </folding>
         </state>
       </provider>

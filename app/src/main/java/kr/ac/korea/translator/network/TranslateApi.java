@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,17 +85,13 @@ public class TranslateApi {
     public static String Translate (List<String> text) throws Exception {
         URL url = new URL (host + path + params);
         List<RequestBody> objList = new ArrayList<RequestBody>();
+        //objList.add(new RequestBody(t));
+        /*
         for(String t:text) {
-            //String encoded = new String(t.getBytes("utf-8"), "iso8859-1");
-            Charset charset = Charset.forName("UTF-8");
-            String encoded = charset.encode(t).toString();
-            Log.e("s","original"+t+"encoded : " + encoded);
-            if(!encoded.contains("\\u")) {
-                objList.add(new RequestBody(t));
-                Log.e("s",t);
-            }
-        }
-        String content = new Gson().toJson(objList);
+            objList.add(new RequestBody(t));
+        }*/
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        String content = gson.toJson(objList);
         return prettify(Post(url, content));
     }
 
