@@ -17,17 +17,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.OrientationEventListener;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
 import kr.ac.korea.translator.R;
-import kr.ac.korea.translator.model.TextBlock;
+import kr.ac.korea.translator.model.TextContainer;
 import kr.ac.korea.translator.network.OCRApi;
 import kr.ac.korea.translator.view.common.BaseActivity;
 
@@ -50,7 +54,7 @@ public class CoverActivity extends BaseActivity {
     public static int mHeight;
     private static final String TAG = CoverActivity.class.getName();
     public Context mContext;
-    public static List<TextBlock> textBlocks;
+    public static List<TextContainer> textContainers;
 
 
     public void onDestroy () {
@@ -62,6 +66,7 @@ public class CoverActivity extends BaseActivity {
         setContentView(R.layout.activity_cover);
         mContext = this;
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         state=false;
         mHandler = new Handler();
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -72,21 +77,6 @@ public class CoverActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE) {
             mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
             if (mMediaProjection != null) {
-                File externalFilesDir = getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
-                }
                 // display metrics
                 DisplayMetrics metrics = getResources().getDisplayMetrics();
                 mDensity = metrics.densityDpi;
@@ -172,20 +162,27 @@ public class CoverActivity extends BaseActivity {
                     bitmap.copyPixelsFromBuffer(buffer);
                     TranslateCallback translateCallback = new TranslateCallback() {
                         @Override
-                        public void resultToScreen(List<TextBlock> result) {
+                        public void resultToScreen(TextContainer result) {
                             //화면에 draw
-                            for(TextBlock t:result) {
-                                Log.e("S", t.getRst());
+                            RelativeLayout container = (RelativeLayout)findViewById(R.id.container);
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            Log.e("size",Integer.toString(result.getRst().size()));
+                            for(int i=0;i<result.getRst().size();i++) {
+                                if(result.getRst().get(i)==null)
+                                    continue;
+                                TextView textView = new TextView(CoverActivity.this);
+                                textView.setText(result.getRst().get(i));
+                                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                                params.setMargins(result.getOutX().get(i),result.getOutY().get(i),0,0);
+                                textView.setLayoutParams(params);
+                                textView.setTextColor(Color.WHITE);
+                                textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
+                                textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                                container.addView(textView);
                             }
                         }
                     };
-                    textBlocks = OCRApi.callOcr(bitmap,mContext,translateCallback);
-                    /*
-                    // write bitmap to a file
-                    fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
-                    bitmap.compress(CompressFormat.JPEG, 100, fos);
-                    */
-                    Log.e(TAG, "captured image: ");
+                    OCRApi.callOcr(bitmap,mContext,translateCallback);
                     mMediaProjection.stop();
                 }
 
@@ -208,8 +205,6 @@ public class CoverActivity extends BaseActivity {
         }
     }
     public interface TranslateCallback{
-        void resultToScreen(List<TextBlock> result);
+        void resultToScreen(TextContainer result);
     }
-
-
 }

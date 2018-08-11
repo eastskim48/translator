@@ -24,16 +24,13 @@ import com.google.api.services.vision.v1.model.Paragraph;
 import com.google.api.services.vision.v1.model.Symbol;
 import com.google.api.services.vision.v1.model.TextAnnotation;
 import com.google.api.services.vision.v1.model.Word;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.ac.korea.translator.model.Detection;
-import kr.ac.korea.translator.model.TextBlock;
+import kr.ac.korea.translator.model.TextContainer;
 import kr.ac.korea.translator.utils.PackageManagerUtils;
 import kr.ac.korea.translator.view.main.CoverActivity;
 
@@ -44,22 +41,20 @@ public class OCRApi {
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static Context mContext;
-    public static List<TextBlock> rstList;
+    public static TextContainer detectionList;
 
-    public static List<TextBlock> callOcr(final Bitmap bitmap, Context context, CoverActivity.TranslateCallback callback) {
+    public static void callOcr(final Bitmap bitmap, Context context, CoverActivity.TranslateCallback callback) {
         mContext=context;
-        rstList = new ArrayList<>();
+        detectionList = new TextContainer();
         try {
             AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(prepareAnnotationRequest(bitmap),callback);
             labelDetectionTask.execute();
         } catch (IOException e) {
             Log.d(TAG, "failed to make API request because of other IOException " + e.getMessage());
         }
-        return rstList;
     }
 
     public static Vision.Images.Annotate prepareAnnotationRequest(final Bitmap bitmap) throws IOException {
-        Log.e("S","hi");
         HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -88,7 +83,7 @@ public class OCRApi {
             // Convert the bitmap to a JPEG
             // Just in case it's a format that Android understands but Cloud Vision
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream);
             byte[] imageBytes = byteArrayOutputStream.toByteArray();
             // Base64 encode the JPEG
             base64EncodedImage.encodeContent(imageBytes);
@@ -134,8 +129,7 @@ public class OCRApi {
             return "Cloud Vision API request failed. Check logs for details.";
         }
         protected void onPostExecute(String result) {
-            Log.e("s",result);
-            mCallback.resultToScreen(rstList);
+            mCallback.resultToScreen(detectionList);
         }
     }
 
@@ -162,29 +156,13 @@ public class OCRApi {
                             }
                             blockText = blockText + paraText;
                         }
-                        String s = translate(blockText);
-                        if(s!=null)
-                            rstList.add(new TextBlock(block.getBoundingBox(),s));
+                        detectionList.addItem(block.getBoundingBox(),blockText);
                         pageText = pageText + blockText;
                     }
                 }
             }
         }
+        detectionList.translate();
         return message.toString();
-    }
-
-
-    public static String translate(String text){
-        try{
-            String s = TranslateApi.Translate(text);
-            Gson gson = new Gson();
-            List<Detection> result = gson.fromJson(s, new TypeToken<List<Detection>>() {}.getType());
-            if(!result.get(0).getDetectedLanguage().getLanguage().equals("ko"))
-                return result.get(0).getTranslations().get(0).getText();
-        }
-        catch(Exception e){
-            Log.e("Exception",e.toString());
-        }
-        return null;
     }
 }

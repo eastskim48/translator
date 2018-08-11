@@ -1,4 +1,7 @@
 package kr.ac.korea.translator.network;
+
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -8,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,15 +59,14 @@ public class TranslateApi {
     }
 
     public static String Post (URL url, String content) throws Exception {
+        Log.e("s",content);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Content-Length", content.length() + "");
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
+        connection.setRequestMethod("POST");
         connection.setRequestProperty("X-ClientTraceId", java.util.UUID.randomUUID().toString());
-        connection.setDoOutput(true);
-
         DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
         byte[] encoded_content = content.getBytes("UTF-8");
         wr.write(encoded_content, 0, encoded_content.length);
@@ -77,17 +80,23 @@ public class TranslateApi {
             response.append(line);
         }
         in.close();
-
         return response.toString();
     }
 
-    public static String Translate (String text) throws Exception {
+    public static String Translate (List<String> text) throws Exception {
         URL url = new URL (host + path + params);
-
         List<RequestBody> objList = new ArrayList<RequestBody>();
-        objList.add(new RequestBody(text));
+        for(String t:text) {
+            //String encoded = new String(t.getBytes("utf-8"), "iso8859-1");
+            Charset charset = Charset.forName("UTF-8");
+            String encoded = charset.encode(t).toString();
+            Log.e("s","original"+t+"encoded : " + encoded);
+            if(!encoded.contains("\\u")) {
+                objList.add(new RequestBody(t));
+                Log.e("s",t);
+            }
+        }
         String content = new Gson().toJson(objList);
-
         return prettify(Post(url, content));
     }
 
