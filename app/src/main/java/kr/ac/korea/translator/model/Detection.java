@@ -6,17 +6,15 @@ import lombok.Data;
 
 @Data
 public class Detection {
+    public DetectedLanguage detectedLanguage;
+    public List<Translation> translations;
     @Data
-    public class detectedLanguage{
+    public class DetectedLanguage{
         public String language;
         public double score;
     }
     @Data
-    public class t{
-        public List<translation> translations;
-    }
-    @Data
-    public class translation{
+    public class Translation{
         public String text;
         public String to;
     }

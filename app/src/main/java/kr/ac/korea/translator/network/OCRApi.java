@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.ac.korea.translator.model.Detection;
+import kr.ac.korea.translator.model.TextBlock;
 import kr.ac.korea.translator.utils.PackageManagerUtils;
 import kr.ac.korea.translator.view.main.CoverActivity;
 
@@ -43,16 +44,18 @@ public class OCRApi {
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static Context mContext;
+    public static List<TextBlock> rstList;
 
-    public static void callOcr(final Bitmap bitmap,Context context) {
+    public static List<TextBlock> callOcr(final Bitmap bitmap, Context context, CoverActivity.TranslateCallback callback) {
         mContext=context;
+        rstList = new ArrayList<>();
         try {
-            AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(prepareAnnotationRequest(bitmap));
+            AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(prepareAnnotationRequest(bitmap),callback);
             labelDetectionTask.execute();
         } catch (IOException e) {
-            Log.d(TAG, "failed to make API request because of other IOException " +
-                    e.getMessage());
+            Log.d(TAG, "failed to make API request because of other IOException " + e.getMessage());
         }
+        return rstList;
     }
 
     public static Vision.Images.Annotate prepareAnnotationRequest(final Bitmap bitmap) throws IOException {
@@ -110,8 +113,10 @@ public class OCRApi {
 
     public static class LabelDetectionTask extends AsyncTask<Object, Void, String> {
         private Vision.Images.Annotate mRequest;
-        LabelDetectionTask(Vision.Images.Annotate annotate) {
+        private CoverActivity.TranslateCallback mCallback;
+        LabelDetectionTask(Vision.Images.Annotate annotate, CoverActivity.TranslateCallback callback) {
             mRequest = annotate;
+            mCallback = callback;
         }
         @Override
         protected String doInBackground(Object... params) {
@@ -130,6 +135,7 @@ public class OCRApi {
         }
         protected void onPostExecute(String result) {
             Log.e("s",result);
+            mCallback.resultToScreen(rstList);
         }
     }
 
@@ -154,13 +160,12 @@ public class OCRApi {
                                 }
                                 paraText = String.format("%s %s", paraText, wordText);
                             }
-                            Log.e("blockTest","blockText :"+blockText);
-                            Translate(blockText);
                             blockText = blockText + paraText;
                         }
+                        String s = translate(blockText);
+                        if(s!=null)
+                            rstList.add(new TextBlock(block.getBoundingBox(),s));
                         pageText = pageText + blockText;
-                        Log.e("s","blockText"+blockText); //이 단위로 넣어야 함
-                        Log.e("s","blockTextBounding"+block.getBoundingBox());
                     }
                 }
             }
@@ -168,18 +173,18 @@ public class OCRApi {
         return message.toString();
     }
 
-    public static void Translate(String text){
+
+    public static String translate(String text){
         try{
             String s = TranslateApi.Translate(text);
             Gson gson = new Gson();
-            Detection result = gson.fromJson(s, Detection.class);
-            if(result.detectedLanguage.getLanguage().equals("ko"))
-                return;
-            else{
-                Log.e("translateRst",result.t.translations.get(0).text);
-            }
+            List<Detection> result = gson.fromJson(s, new TypeToken<List<Detection>>() {}.getType());
+            if(!result.get(0).getDetectedLanguage().getLanguage().equals("ko"))
+                return result.get(0).getTranslations().get(0).getText();
         }
         catch(Exception e){
+            Log.e("Exception",e.toString());
         }
+        return null;
     }
 }

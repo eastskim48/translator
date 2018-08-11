@@ -24,8 +24,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import kr.ac.korea.translator.R;
+import kr.ac.korea.translator.model.TextBlock;
 import kr.ac.korea.translator.network.OCRApi;
 import kr.ac.korea.translator.view.common.BaseActivity;
 
@@ -48,6 +50,7 @@ public class CoverActivity extends BaseActivity {
     public static int mHeight;
     private static final String TAG = CoverActivity.class.getName();
     public Context mContext;
+    public static List<TextBlock> textBlocks;
 
 
     public void onDestroy () {
@@ -165,10 +168,18 @@ public class CoverActivity extends BaseActivity {
                     int pixelStride = planes[0].getPixelStride();
                     int rowStride = planes[0].getRowStride();
                     int rowPadding = rowStride - pixelStride * mWidth;
-                    // create bitmap
                     bitmap = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888);
                     bitmap.copyPixelsFromBuffer(buffer);
-                    OCRApi.callOcr(bitmap,mContext);
+                    TranslateCallback translateCallback = new TranslateCallback() {
+                        @Override
+                        public void resultToScreen(List<TextBlock> result) {
+                            //화면에 draw
+                            for(TextBlock t:result) {
+                                Log.e("S", t.getRst());
+                            }
+                        }
+                    };
+                    textBlocks = OCRApi.callOcr(bitmap,mContext,translateCallback);
                     /*
                     // write bitmap to a file
                     fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
@@ -195,6 +206,9 @@ public class CoverActivity extends BaseActivity {
                     image.close();
             }
         }
+    }
+    public interface TranslateCallback{
+        void resultToScreen(List<TextBlock> result);
     }
 
 

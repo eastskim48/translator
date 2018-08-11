@@ -57,6 +57,7 @@ public class TranslateApi {
     public static String Post (URL url, String content) throws Exception {
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Content-Length", content.length() + "");
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
