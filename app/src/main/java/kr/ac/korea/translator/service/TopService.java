@@ -4,28 +4,28 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import kr.ac.korea.translator.R;
 import kr.ac.korea.translator.view.main.CoverActivity;
 
 public class TopService extends Service implements View.OnTouchListener{
-    private WindowManager windowManager;
-    View mView;
-    boolean moving;
-    private float offsetX;
-    private float offsetY;
-    private int originalXPos;
-    private int originalYPos;
-    private View topLeftView;
+    View vOverlay;
+    float xpos = 0;
+    float ypos = 0;
+    private WindowManager wm;
 
     @Override public IBinder onBind(Intent intent) {
         // Not used
@@ -33,94 +33,86 @@ public class TopService extends Service implements View.OnTouchListener{
     }
     @Override public void onCreate() {
         super.onCreate();
-        LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        |WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        |WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                PixelFormat.TRANSLUCENT);
-        params.type = checkVersion();
-        params.gravity = Gravity.TOP | Gravity.LEFT;
-        mView = inflate.inflate(R.layout.layout_top_service, null);
-        mView.setOnTouchListener(this);
-        params.x = 0;
-        params.y = 0; //floating view
-        Button capture = mView.findViewById(R.id.takeShot);
-        capture.setOnClickListener(new View.OnClickListener() {
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, LayoutParams.TYPE_APPLICATION_OVERLAY, LayoutParams.FLAG_NOT_FOCUSABLE|LayoutParams.FLAG_NOT_TOUCH_MODAL|LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, PixelFormat.TRANSLUCENT);
+
+        lp.gravity = Gravity.START | Gravity.TOP;
+        lp.type = checkVersion();
+
+        vOverlay = li.inflate(R.layout.layout_top_service, null);
+        vOverlay.setOnTouchListener(this);
+
+        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        wm.addView(vOverlay, lp);
+
+        Button btnTranslate = vOverlay.findViewById(R.id.btn_translate);
+        ImageButton btnClose = vOverlay.findViewById(R.id.btn_close);
+
+        btnTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),CoverActivity.class));
             }
-        }); //capture
-
-        Button close = mView.findViewById(R.id.close);
-        close.setOnClickListener(new View.OnClickListener() {
+        });
+        btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 stopSelf();
             }
-        }); //closeButton
-
-        windowManager.addView(mView, params);
-        topLeftView = new View(this);
-        WindowManager.LayoutParams topLeftParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        |WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSLUCENT);
-        topLeftParams.type = checkVersion();
-        topLeftParams.gravity = Gravity.LEFT | Gravity.TOP;
-        topLeftParams.x = 0;
-        topLeftParams.y = 0;
-        topLeftParams.width = 0;
-        topLeftParams.height = 0;
-        windowManager.addView(topLeftView, topLeftParams); //전체 뷰
+        });
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mView != null) windowManager.removeView(mView);
+        if (vOverlay != null) {
+            wm.removeView(vOverlay);
+            vOverlay = null;
+        }
     }
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            float x = event.getRawX();
-            float y = event.getRawY();
-            moving = false;
-            int[] location = new int[2];
-            mView.getLocationOnScreen(location);
-            originalXPos = location[0];
-            originalYPos = location[1];
-            offsetX = originalXPos - x;
-            offsetY = originalYPos - y;
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            int[] topLeftLocationOnScreen = new int[2];
-            topLeftView.getLocationOnScreen(topLeftLocationOnScreen);
-            float x = event.getRawX();
-            float y = event.getRawY();
-            WindowManager.LayoutParams params = (WindowManager.LayoutParams) mView.getLayoutParams();
-            int newX = (int) (offsetX + x);
-            int newY = (int) (offsetY + y);
-            if (Math.abs(newX - originalXPos) < 1 && Math.abs(newY - originalYPos) < 1 && !moving) {
-                return false;
-            }
-            params.x = newX - (topLeftLocationOnScreen[0]);
-            params.y = newY - (topLeftLocationOnScreen[1]);
-            windowManager.updateViewLayout(mView, params);
-            moving = true;
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (moving) {
-                return true;
-            }
-        } //floating View 이
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        WindowManager wmSub = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        Display d = wmSub.getDefaultDisplay();
+        Point p = new Point();
+        d.getSize(p);
+
+        Log.d("[SIZE]", String.valueOf(p));
+
+        int action = motionEvent.getAction();
+        int pointer = motionEvent.getPointerCount();
+
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                if(pointer == 1) {
+                    vOverlay.performClick();
+                }
+                break;
+            case MotionEvent.ACTION_DOWN:
+                if(pointer == 1) {
+                    xpos = motionEvent.getRawX();
+                    ypos = motionEvent.getRawY();
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if(pointer == 1) {
+                    WindowManager.LayoutParams lp = (WindowManager.LayoutParams) view.getLayoutParams();
+
+                    float dx = xpos - motionEvent.getRawX();
+                    float dy = ypos - motionEvent.getRawY();
+
+                    xpos = motionEvent.getRawX();
+                    ypos = motionEvent.getRawY();
+
+                    lp.x = (int) (lp.x - dx);
+                    lp.y = (int) (lp.y - dy);
+
+                    wm.updateViewLayout(view, lp);
+                    return true;
+                }
+                break;
+        }
         return false;
     }
     private int checkVersion(){

@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Translator</string>
+    <string name="app_name">화면번역기</string>
+
+    <string name="btn_start">시작</string>
+    <string name="btn_stop">종료</string>
+
+    <string name="btn_translate">번역</string>
+    <string name="btn_close">닫기</string>
 </resources>

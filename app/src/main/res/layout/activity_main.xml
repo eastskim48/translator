@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="start" />
-
-        <Button
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="close" />
-    </LinearLayout>
-
-    <SurfaceView
-        android:id="@+id/screen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="다음 언어로 번역하기"
+                android:textColor="#333333"
+                android:textAlignment="center"
+                android:layout_weight=".45" />
+
+            <Spinner
+                android:id="@+id/spn_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/arr_languages"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:textColor="#333333"
+                android:layout_weight=".45" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_start"
+                android:background="@color/colorYellow"
+                android:layout_weight=".45" />
+
+            <Button
+                android:id="@+id/btn_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_stop"
+                android:background="@color/colorYellow"
+                android:layout_weight=".45" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

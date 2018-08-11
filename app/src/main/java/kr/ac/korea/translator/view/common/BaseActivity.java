@@ -1,11 +1,11 @@
 package kr.ac.korea.translator.view.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public class BaseActivity extends Activity implements View.OnClickListener {
     protected String token;
     @Override
     public void onClick(View v) {
