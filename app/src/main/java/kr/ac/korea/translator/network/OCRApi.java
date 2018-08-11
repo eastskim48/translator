@@ -41,13 +41,15 @@ public class OCRApi {
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static Context mContext;
-    public static TextContainer detectionList;
+    public static List<TextContainer> detectionList;
+    public static CoverActivity.TranslateCallback mCallback;
 
     public static void callOcr(final Bitmap bitmap, Context context, CoverActivity.TranslateCallback callback) {
         mContext=context;
-        detectionList = new TextContainer();
+        mCallback = callback;
+        detectionList = new ArrayList<>();
         try {
-            AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(prepareAnnotationRequest(bitmap),callback);
+            AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(prepareAnnotationRequest(bitmap));
             labelDetectionTask.execute();
         } catch (IOException e) {
             Log.d(TAG, "failed to make API request because of other IOException " + e.getMessage());
@@ -108,10 +110,8 @@ public class OCRApi {
 
     public static class LabelDetectionTask extends AsyncTask<Object, Void, String> {
         private Vision.Images.Annotate mRequest;
-        private CoverActivity.TranslateCallback mCallback;
-        LabelDetectionTask(Vision.Images.Annotate annotate, CoverActivity.TranslateCallback callback) {
+        LabelDetectionTask(Vision.Images.Annotate annotate) {
             mRequest = annotate;
-            mCallback = callback;
         }
         @Override
         protected String doInBackground(Object... params) {
@@ -129,7 +129,6 @@ public class OCRApi {
             return "Cloud Vision API request failed. Check logs for details.";
         }
         protected void onPostExecute(String result) {
-            mCallback.resultToScreen(detectionList);
         }
     }
 
@@ -156,13 +155,13 @@ public class OCRApi {
                             }
                             blockText = blockText + paraText;
                         }
-                        detectionList.addItem(block.getBoundingBox(),blockText);
+                        detectionList.add(new TextContainer(block.getBoundingBox(),blockText));
                         pageText = pageText + blockText;
                     }
                 }
             }
         }
-        detectionList.translate();
+        mCallback.resultToScreen(detectionList);
         return message.toString();
     }
 }

@@ -25,14 +25,19 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
 import kr.ac.korea.translator.R;
+import kr.ac.korea.translator.model.Detection;
 import kr.ac.korea.translator.model.TextContainer;
 import kr.ac.korea.translator.network.OCRApi;
+import kr.ac.korea.translator.network.TranslateApi;
 import kr.ac.korea.translator.view.common.BaseActivity;
 
 public class CoverActivity extends BaseActivity {
@@ -54,8 +59,11 @@ public class CoverActivity extends BaseActivity {
     public static int mHeight;
     private static final String TAG = CoverActivity.class.getName();
     public Context mContext;
-    public static List<TextContainer> textContainers;
-
+    public static List<TextContainer> mResult;
+    public Detection r;
+    public TextContainer t;
+    public int count;
+    RelativeLayout container;
 
     public void onDestroy () {
         super.onDestroy();
@@ -69,6 +77,13 @@ public class CoverActivity extends BaseActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         state=false;
         mHandler = new Handler();
+        container = (RelativeLayout) findViewById(R.id.container);
+        container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
@@ -143,7 +158,7 @@ public class CoverActivity extends BaseActivity {
         }
     }
 
-    public class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
+    public class ImageAvailableListener implements ImageReader.OnImageAvailableListener{
         @Override
         public void onImageAvailable(ImageReader reader) {
             Image image = null;
@@ -152,7 +167,7 @@ public class CoverActivity extends BaseActivity {
             try {
                 image = reader.acquireLatestImage();
                 if (image != null&&!CoverActivity.state) {
-                    CoverActivity.state=true;
+                    CoverActivity.state = true;
                     android.media.Image.Plane[] planes = image.getPlanes();
                     ByteBuffer buffer = planes[0].getBuffer();
                     int pixelStride = planes[0].getPixelStride();
@@ -162,27 +177,40 @@ public class CoverActivity extends BaseActivity {
                     bitmap.copyPixelsFromBuffer(buffer);
                     TranslateCallback translateCallback = new TranslateCallback() {
                         @Override
-                        public void resultToScreen(TextContainer result) {
-                            //화면에 draw
-                            RelativeLayout container = (RelativeLayout)findViewById(R.id.container);
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            Log.e("size",Integer.toString(result.getRst().size()));
-                            for(int i=0;i<result.getRst().size();i++) {
-                                if(result.getRst().get(i)==null)
-                                    continue;
-                                TextView textView = new TextView(CoverActivity.this);
-                                textView.setText(result.getRst().get(i));
-                                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-                                params.setMargins(result.getOutX().get(i),result.getOutY().get(i),0,0);
-                                textView.setLayoutParams(params);
-                                textView.setTextColor(Color.WHITE);
-                                textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
-                                textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                                container.addView(textView);
+                        public void resultToScreen(List<TextContainer> result) {
+                            mResult = result;
+                            Gson gson = new Gson();
+                            count=-1;
+                            for (TextContainer tv : result) {
+                                t=tv;
+                                try {
+                                    List<Detection> translateRst = gson.fromJson(TranslateApi.Translate(t.getRst()), new TypeToken<List<Detection>>(){}.getType());
+                                    r=translateRst.get(0);
+                                    if (r.getTranslations().get(0)!= null) {
+                                        r=translateRst.get(0);
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                TextView textView = new TextView(CoverActivity.this);
+                                                textView.setText(r.getTranslations().get(0).getText());
+                                                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                                params.setMargins(mResult.get(count).getX(), mResult.get(count).getY(), 0, 0);
+                                                textView.setLayoutParams(params);
+                                                textView.setTextColor(Color.WHITE);
+                                                textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
+                                                textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                                                container.addView(textView);
+                                            }
+                                        });
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("error", e.toString());
+                                }
+                                count++;
                             }
                         }
                     };
-                    OCRApi.callOcr(bitmap,mContext,translateCallback);
+                    OCRApi.callOcr(bitmap, mContext, translateCallback);
                     mMediaProjection.stop();
                 }
 
@@ -205,6 +233,6 @@ public class CoverActivity extends BaseActivity {
         }
     }
     public interface TranslateCallback{
-        void resultToScreen(TextContainer result);
+        void resultToScreen(List<TextContainer> result);
     }
 }

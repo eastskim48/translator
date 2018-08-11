@@ -58,7 +58,6 @@ public class TranslateApi {
     }
 
     public static String Post (URL url, String content) throws Exception {
-        Log.e("s",content);
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setRequestProperty("Content-Type", "application/json");
@@ -82,14 +81,10 @@ public class TranslateApi {
         return response.toString();
     }
 
-    public static String Translate (List<String> text) throws Exception {
+    public static String Translate (String text) throws Exception {
         URL url = new URL (host + path + params);
         List<RequestBody> objList = new ArrayList<RequestBody>();
-        //objList.add(new RequestBody(t));
-        /*
-        for(String t:text) {
-            objList.add(new RequestBody(t));
-        }*/
+        objList.add(new RequestBody(text));
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         String content = gson.toJson(objList);
         return prettify(Post(url, content));
@@ -101,4 +96,11 @@ public class TranslateApi {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(json);
     }
+    /*
+    public static String checkString(String str){
+        String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
+        str =str.replaceAll(match, "");
+        return str;
+    }
+    */
 }
