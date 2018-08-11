@@ -3,6 +3,7 @@ package kr.ac.korea.translator.view.main;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -15,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.content.SharedPreferences.Editor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import kr.ac.korea.translator.view.common.BaseActivity;
 public class MainActivity extends BaseActivity {
     private static final String FILE_NAME = "LANG";
 
-    private static final Map<String, String> m = new LinkedHashMap<>();
+    private static final Map<String, Integer> m = new LinkedHashMap<>();
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 1;
 
     @Override
@@ -36,21 +36,30 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = getWindow().getDecorView();
-
+        m.put("한국어",0);
+        m.put("영어",1);
+        m.put("일본어",2);
+        m.put("중국어",3);
+        m.put("독일어",4);
+        m.put("프랑스어",5);
+        m.put("스페인어",6);
+        m.put("헝가리어",7);
+        m.put("이탈리아어",8);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
             }
         }
-
         final String[] data = getResources().getStringArray(R.array.arr_languages);
         final SharedPreferences sp = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-        final Editor editor = sp.edit();
         Spinner spnLanguage = findViewById(R.id.spn_language);
+        spnLanguage.setFocusable(true);
+        final Editor editor = sp.edit();
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, data);
         spnLanguage.setAdapter(adapter);
+        spnLanguage.setSelection(m.get(sp.getString("lang","ko")));
         spnLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -72,7 +81,7 @@ public class MainActivity extends BaseActivity {
         bt_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopService(new Intent(MainActivity.this, TopService.class));
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
     }

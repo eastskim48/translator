@@ -1,5 +1,6 @@
 package kr.ac.korea.translator.view.main;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -23,6 +25,7 @@ import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,6 +70,8 @@ public class CoverActivity extends BaseActivity {
     RelativeLayout container;
     public static String selectedLang;
     private static final Map<String, String> m = new LinkedHashMap<>();
+    public int statusBarHeight;
+    public ProgressDialog mProgressDialog;
 
     public void onDestroy () {
         super.onDestroy();
@@ -75,6 +80,7 @@ public class CoverActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cover);
+        showProgressDialog();
         mContext = this;
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
@@ -104,6 +110,7 @@ public class CoverActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
+            getStatusBarHeight();
             mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
             if (mMediaProjection != null) {
                 // display metrics
@@ -192,6 +199,12 @@ public class CoverActivity extends BaseActivity {
                     TranslateCallback translateCallback = new TranslateCallback() {
                         @Override
                         public void resultToScreen(List<TextContainer> result) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideProgressDialog();
+                                }
+                            });
                             mResult = result;
                             Gson gson = new Gson();
                             count=-1;
@@ -200,7 +213,7 @@ public class CoverActivity extends BaseActivity {
                                 try {
                                     List<Detection> translateRst = gson.fromJson(TranslateApi.Translate(t.getRst()), new TypeToken<List<Detection>>(){}.getType());
                                     r=translateRst.get(0);
-                                    if (r.getTranslations().get(0)!= null) {
+                                    if (r.getTranslations().get(0)!= null||mResult.get(count).getY()>statusBarHeight) {
                                         r=translateRst.get(0);
                                         runOnUiThread(new Runnable() {
                                             public void run() {
@@ -208,7 +221,7 @@ public class CoverActivity extends BaseActivity {
                                                 textView.setText(r.getTranslations().get(0).getText());
                                                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
                                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                                params.setMargins(mResult.get(count).getX(), mResult.get(count).getY(), 0, 0);
+                                                params.setMargins(mResult.get(count).getX(), mResult.get(count).getY()-statusBarHeight, 0, 0);
                                                 textView.setLayoutParams(params);
                                                 textView.setTextColor(Color.WHITE);
                                                 textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
@@ -238,7 +251,6 @@ public class CoverActivity extends BaseActivity {
                         ioe.printStackTrace();
                     }
                 }
-
                 if (bitmap != null)
                     bitmap.recycle();
                 if (image != null)
@@ -251,5 +263,27 @@ public class CoverActivity extends BaseActivity {
     }
     public static String getSelecteedLang(){
         return selectedLang;
+    }
+
+    public void getStatusBarHeight(){
+        Rect rectangle = new Rect();
+        Window window = getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        statusBarHeight =  rectangle.top;
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("번역중...");
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }
