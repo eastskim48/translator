@@ -219,7 +219,7 @@ public class CoverActivity extends BaseActivity {
                                             public void run() {
                                                 TextView textView = new TextView(CoverActivity.this);
                                                 textView.setText(r.getTranslations().get(0).getText());
-                                                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+                                                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                                 params.setMargins(mResult.get(count).getX(), mResult.get(count).getY()-statusBarHeight, 0, 0);
                                                 textView.setLayoutParams(params);
