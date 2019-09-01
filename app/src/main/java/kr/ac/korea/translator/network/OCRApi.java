@@ -1,167 +1,185 @@
 package kr.ac.korea.translator.network;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.vision.v1.Vision;
-import com.google.api.services.vision.v1.VisionRequest;
-import com.google.api.services.vision.v1.VisionRequestInitializer;
-import com.google.api.services.vision.v1.model.AnnotateImageRequest;
-import com.google.api.services.vision.v1.model.AnnotateImageResponse;
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
-import com.google.api.services.vision.v1.model.Block;
-import com.google.api.services.vision.v1.model.Feature;
-import com.google.api.services.vision.v1.model.Page;
-import com.google.api.services.vision.v1.model.Paragraph;
-import com.google.api.services.vision.v1.model.Symbol;
-import com.google.api.services.vision.v1.model.TextAnnotation;
-import com.google.api.services.vision.v1.model.Word;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import kr.ac.korea.translator.model.TextContainer;
-import kr.ac.korea.translator.utils.PackageManagerUtils;
 import kr.ac.korea.translator.view.main.CoverActivity;
 
-public class OCRApi {
-    private static final String TAG = CoverActivity.class.getName();
-    private static final String API_KEY = "AIzaSyAookS18qQ5Nz6aG3UR_XZ6YVb6T96RaL0";
-    private static final int MAX_LABEL_RESULTS = 50;
-    private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
-    private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
-    private static Context mContext;
-    public static List<TextContainer> detectionList;
-    public static CoverActivity.TranslateCallback mCallback;
+/*
+ * Gson: https://github.com/google/gson
+ * Maven info:
+ *     groupId: com.google.code.gson
+ *     artifactId: gson
+ *     version: 2.8.1
+ */
 
-    public static void callOcr(final Bitmap bitmap, Context context, CoverActivity.TranslateCallback callback) {
-        mContext=context;
-        mCallback = callback;
-        detectionList = new ArrayList<>();
-        try {
-            AsyncTask<Object, Void, String> labelDetectionTask = new LabelDetectionTask(prepareAnnotationRequest(bitmap));
-            labelDetectionTask.execute();
-        } catch (IOException e) {
-            Log.d(TAG, "failed to make API request because of other IOException " + e.getMessage());
+/* NOTE: To compile and run this code:
+1. Save this file as Translate.java.
+2. Run:
+    javac Translate.java -cp .;gson-2.8.1.jar -encoding UTF-8
+3. Run:
+    java -cp .;gson-2.8.1.jar Translate
+*/
+
+public class OCRApi{
+
+// **********************************************
+// *** Update or verify the following values. ***
+// **********************************************
+
+    // Replace the subscriptionKey string value with your valid subscription key.
+    static String subscriptionKey = "c2c8f85aeb454b368f851a6d1e36a6dd";
+
+    static String host = "https://southeastasia.api.cognitive.microsoft.com";
+    static String path = "/vision/v2.0/ocr?detectOrientation=true";
+    static String params;
+
+
+
+    public static class RequestBody {
+        byte[] data;
+
+        public RequestBody(byte[] data) {
+            this.data = data;
         }
     }
 
-    public static Vision.Images.Annotate prepareAnnotationRequest(final Bitmap bitmap) throws IOException {
-        HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-        JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+    private static class OCRTask extends AsyncTask<Void, String, String>{
+        private byte[] data;
+        private CoverActivity.TranslateCallback callback;
 
-        VisionRequestInitializer requestInitializer =
-                new VisionRequestInitializer(API_KEY) {
-                    @Override
-                    protected void initializeVisionRequest(VisionRequest<?> visionRequest)
-                            throws IOException {
-                        super.initializeVisionRequest(visionRequest);
-                        String packageName = mContext.getPackageName();
-                        visionRequest.getRequestHeaders().set(ANDROID_PACKAGE_HEADER, packageName);
-                        String sig = PackageManagerUtils.getSignature(mContext.getPackageManager(), packageName);
-                        visionRequest.getRequestHeaders().set(ANDROID_CERT_HEADER, sig);
-                    }
-                };
-
-        Vision.Builder builder = new Vision.Builder(httpTransport, jsonFactory, null);
-        builder.setVisionRequestInitializer(requestInitializer);
-        Vision vision = builder.build();
-        BatchAnnotateImagesRequest batchAnnotateImagesRequest =
-                new BatchAnnotateImagesRequest();
-        batchAnnotateImagesRequest.setRequests(new ArrayList<AnnotateImageRequest>() {{
-            AnnotateImageRequest annotateImageRequest = new AnnotateImageRequest();
-            // Add the image
-            com.google.api.services.vision.v1.model.Image base64EncodedImage = new com.google.api.services.vision.v1.model.Image();
-            // Convert the bitmap to a JPEG
-            // Just in case it's a format that Android understands but Cloud Vision
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream);
-            byte[] imageBytes = byteArrayOutputStream.toByteArray();
-            // Base64 encode the JPEG
-            base64EncodedImage.encodeContent(imageBytes);
-            annotateImageRequest.setImage(base64EncodedImage);
-            // add the features we want
-            annotateImageRequest.setFeatures(new ArrayList<Feature>() {{
-                Feature textDetection = new Feature();
-                textDetection.setType("DOCUMENT_TEXT_DETECTION");
-                textDetection.setMaxResults(MAX_LABEL_RESULTS);
-                add(textDetection);
-            }});
-            // Add the list of one thing to the request
-            add(annotateImageRequest);
-        }});
-        Vision.Images.Annotate annotateRequest =
-                vision.images().annotate(batchAnnotateImagesRequest);
-        // Due to a bug: requests to Vision API containing large images fail when GZipped.
-        annotateRequest.setDisableGZipContent(true);
-        Log.d(TAG, "created Cloud Vision request object, sending request");
-        return annotateRequest;
-    }
-
-    public static class LabelDetectionTask extends AsyncTask<Object, Void, String> {
-        private Vision.Images.Annotate mRequest;
-        LabelDetectionTask(Vision.Images.Annotate annotate) {
-            mRequest = annotate;
+        public OCRTask(byte[] data, CoverActivity.TranslateCallback callback){
+            this.data = data;
+            this.callback = callback;
         }
         @Override
-        protected String doInBackground(Object... params) {
+        protected String doInBackground(Void... v) {
+            List<TextContainer> result = null;
             try {
-                Log.d(TAG, "created Cloud Vision request object, sending request");
-                BatchAnnotateImagesResponse response = mRequest.execute();
-                return convertResponseToString(response);
+                byte[] dataBytes = this.data;
+                URL url = new URL(host + path + params);
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setConnectTimeout(10000); //늘려야 할 수도
+                connection.setRequestProperty("Content-Type", "application/octet-stream");
+                connection.setRequestProperty("Content-Length", dataBytes.length + "");
+                connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(10000);
+                OutputStream outputStream = connection.getOutputStream();
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(dataBytes);
+                byte[] buffer = new byte[4096];
+                int bytesRead = -1;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
 
-            } catch (GoogleJsonResponseException e) {
-                Log.d(TAG, "failed to make API request because " + e.getContent());
-            } catch (IOException e) {
-                Log.d(TAG, "failed to make API request because of other IOException " +
-                        e.getMessage());
+                outputStream.close();
+                inputStream.close();
+                StringBuilder response = new StringBuilder();
+
+                Map<String, List<String>> map = connection.getHeaderFields();
+                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                    Log.e("se", "Key : " + entry.getKey()
+                            + " ,Value : " + entry.getValue());
+                }
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    response.append(line);
+                }
+                in.close();
+                result = parse(response.toString());
+                this.callback.resultToScreen(result);
+
             }
-            return "Cloud Vision API request failed. Check logs for details.";
+            catch (Exception e){
+                Log.e("error", e.toString());
+            }
+            return null;
         }
-        protected void onPostExecute(String result) {
-        }
-    }
 
-    public static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        StringBuilder message = new StringBuilder("I found these things:\n\n");
-        List<AnnotateImageResponse> responses = response.getResponses();
-        String blockText;
-        String pageText;
-        if (responses != null) {
-            for (AnnotateImageResponse res : responses) {
-                TextAnnotation annotation = res.getFullTextAnnotation();
-                for (Page page : annotation.getPages()) {
-                    pageText = "";
-                    for (Block block : page.getBlocks()) {
-                        blockText = "";
-                        for (Paragraph para : block.getParagraphs()) {
-                            String paraText = "";
-                            for (Word word : para.getWords()) {
-                                String wordText = "";
-                                for (Symbol symbol : word.getSymbols()) {
-                                    wordText = wordText + symbol.getText();
-                                }
-                                paraText = String.format("%s %s", paraText, wordText);
-                            }
-                            blockText = blockText + paraText;
-                        }
-                        detectionList.add(new TextContainer(block.getBoundingBox(),blockText));
-                        pageText = pageText + blockText;
+        private static List<TextContainer> parse(String json_text) {
+            String text = null;
+            String box = null;
+            JsonParser parser = new JsonParser();
+            JsonElement json = parser.parse(json_text);
+            JsonObject objects = json.getAsJsonObject();
+            JsonArray arr = objects.get("regions").getAsJsonArray();
+            List<TextContainer> resultArray = new ArrayList<>();
+            for(JsonElement j:arr){
+                JsonArray linesArr = j.getAsJsonObject().get("lines").getAsJsonArray();
+                for(JsonElement lj:linesArr){
+                    JsonArray wordsArr = lj.getAsJsonObject().get("words").getAsJsonArray();
+                    for(JsonElement wj : wordsArr){
+                        //url skip 추가해야 함
+                        JsonObject obj = wj.getAsJsonObject();
+                        text = obj.get("text").getAsString();
+                        box = obj.get("boundingBox").getAsString();
+                        Integer[] pos = parseBoundingBox(box);
+                        TextContainer t = new TextContainer(pos[0],pos[1], text);
+                        resultArray.add(t);
                     }
                 }
             }
+            //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return resultArray;
         }
-        mCallback.resultToScreen(detectionList);
-        return message.toString();
+
+        private static Integer[] parseBoundingBox(String string){
+            Integer[] rst = new Integer[2];
+            try{
+                String[] stringList = string.split(",");
+                rst[0] = Integer.valueOf(stringList[0]);
+                rst[1] = Integer.valueOf(stringList[1]);
+            }
+            catch(Exception e){
+                Log.e("e", e.toString());
+            }
+            return rst;
+        }
     }
+
+
+    public static void Post (Bitmap imgData, CoverActivity.TranslateCallback callback) throws Exception {
+
+        setLanguageParam();
+
+        List<RequestBody> objList = new ArrayList<>();
+        objList.add(new OCRApi.RequestBody(bitmapToByteArray(imgData)));
+        byte[] data = bitmapToByteArray(imgData);
+        OCRTask ocrTask = new OCRTask(data, callback);
+        ocrTask.execute().get();
+    }
+
+    public static byte[] bitmapToByteArray( Bitmap $bitmap ) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        $bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray() ;
+        return byteArray ;
+    }
+    public static void setLanguageParam(){
+        params="&to=" + CoverActivity.getSelecteedLang();
+    }
+
 }

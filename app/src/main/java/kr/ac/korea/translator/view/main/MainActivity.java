@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, data);
         spnLanguage.setAdapter(adapter);
-        spnLanguage.setSelection(m.get(sp.getString("lang","ko")));
+        spnLanguage.setSelection(m.get(sp.getString("lang","한국어")));
         spnLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

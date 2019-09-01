@@ -60,8 +60,9 @@ public class TranslateApi {
     public static String Post (URL url, String content) throws Exception {
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setDoOutput(true);
+        connection.setConnectTimeout(10000);
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Content-Length", content.length() + "");
+        //connection.setRequestProperty("Content-Length", content.length() + "");
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-ClientTraceId", java.util.UUID.randomUUID().toString());
@@ -70,7 +71,6 @@ public class TranslateApi {
         wr.write(encoded_content, 0, encoded_content.length);
         wr.flush();
         wr.close();
-
         StringBuilder response = new StringBuilder ();
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         String line;
@@ -98,6 +98,6 @@ public class TranslateApi {
         return gson.toJson(json);
     }
     public static void setLanguageParam(){
-        params="&to="+CoverActivity.getSelecteedLang();
+        params="&to=" + CoverActivity.getSelecteedLang();
     }
 }

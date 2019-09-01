@@ -51,7 +51,9 @@ public class TopService extends Service implements View.OnTouchListener{
         btnTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),CoverActivity.class));
+                Intent i = new Intent(getApplicationContext(),CoverActivity.class);
+                i.addFlags(i.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
             }
         });
         btnClose.setOnClickListener(new View.OnClickListener() {

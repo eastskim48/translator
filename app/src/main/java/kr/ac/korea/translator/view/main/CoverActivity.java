@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -64,14 +65,17 @@ public class CoverActivity extends BaseActivity {
     public static int mHeight;
     public Context mContext;
     public static List<TextContainer> mResult;
-    public Detection r;
-    public TextContainer t;
-    public int count;
+    public Detection translateResponse;
+    public TextContainer textBox;
+    public static int count;
+    public static Detection.Translation translated;
+    public static boolean up;
     RelativeLayout container;
     public static String selectedLang;
     private static final Map<String, String> m = new LinkedHashMap<>();
     public int statusBarHeight;
     public ProgressDialog mProgressDialog;
+    public Gson gson;
 
     public void onDestroy () {
         super.onDestroy();
@@ -106,6 +110,7 @@ public class CoverActivity extends BaseActivity {
         selectedLang = m.get(sp.getString("lang","한국어"));
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+        gson = new Gson();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -205,39 +210,55 @@ public class CoverActivity extends BaseActivity {
                                     hideProgressDialog();
                                 }
                             });
-                            mResult = result;
-                            Gson gson = new Gson();
-                            count=-1;
-                            for (TextContainer tv : result) {
-                                t=tv;
-                                try {
-                                    List<Detection> translateRst = gson.fromJson(TranslateApi.Translate(t.getRst()), new TypeToken<List<Detection>>(){}.getType());
-                                    r=translateRst.get(0);
-                                    if (r.getTranslations().get(0)!= null||mResult.get(count).getY()>statusBarHeight) {
-                                        r=translateRst.get(0);
-                                        runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                TextView textView = new TextView(CoverActivity.this);
-                                                textView.setText(r.getTranslations().get(0).getText());
-                                                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                                params.setMargins(mResult.get(count).getX(), mResult.get(count).getY()-statusBarHeight, 0, 0);
-                                                textView.setLayoutParams(params);
-                                                textView.setTextColor(Color.WHITE);
-                                                textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
-                                                textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                                                container.addView(textView);
-                                            }
-                                        });
+                            if (result == null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "번역할 글자를 찾지 못했습니다", Toast.LENGTH_LONG).show();
                                     }
-                                } catch (Exception e) {
-                                    Log.e("error", e.toString());
-                                }
-                                count++;
+                                });
+                                return;
                             }
+                            //params.setMargins <- out of bounds exception 해결 위해 추가
+                            else if (result.size() == 0) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "번역할 글자를 찾지 못했습니다", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                return;
+                            }
+                            //result : OCR textBox List
+                            mResult = result;
+                            count = 0;
+                            up = true;
+                            TranslateThread Tthread = new TranslateThread();
+                            Tthread.start();
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    while (count < mResult.size()) {
+                                        if (!up && (translated != null || mResult.get(count).getY() > statusBarHeight)) {
+                                            TextView textView = new TextView(CoverActivity.this);
+                                            textView.setText(translated.getText());
+                                            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                            params.setMargins(mResult.get(count).getX(), mResult.get(count).getY() - statusBarHeight, 0, 0);
+                                            textView.setLayoutParams(params);
+                                            textView.setTextColor(Color.WHITE);
+                                            textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
+                                            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                                            container.addView(textView);
+                                            count++;
+                                            up = true;
+                                        }
+                                    }
+                                }
+                            });
                         }
+
                     };
-                    OCRApi.callOcr(bitmap, mContext, translateCallback);
+                    OCRApi.Post(bitmap, translateCallback);
                     mMediaProjection.stop();
                 }
 
@@ -284,6 +305,25 @@ public class CoverActivity extends BaseActivity {
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
+    }
+
+    class TranslateThread extends Thread{
+        @Override
+        public void run() {
+            while (count < mResult.size()) {
+                if (up) {
+                    try {
+                        List<Detection> translateResponseList = gson.fromJson(TranslateApi.Translate(mResult.get(count).getRst()), new TypeToken<List<Detection>>() {
+                        }.getType());
+                        translateResponse = translateResponseList.get(0);
+                        translated = translateResponse.getTranslations().get(0);
+                    } catch (Exception e) {
+                        Log.e("error", e.toString());
+                    }
+                    up = false;
+                }
+            }
         }
     }
 }
