@@ -6,8 +6,8 @@ android {
         applicationId "kr.ac.korea.translator"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 8
-        versionName "0.9.5"
+        versionCode 9
+        versionName "0.9.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
