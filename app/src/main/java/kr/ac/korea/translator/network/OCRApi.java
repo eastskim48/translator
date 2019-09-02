@@ -120,6 +120,7 @@ public class OCRApi{
         }
 
         private static List<TextContainer> parse(String json_text) {
+            Log.e("test",json_text);
             String text = null;
             String box = null;
             JsonParser parser = new JsonParser();
@@ -127,6 +128,28 @@ public class OCRApi{
             JsonObject objects = json.getAsJsonObject();
             JsonArray arr = objects.get("regions").getAsJsonArray();
             List<TextContainer> resultArray = new ArrayList<>();
+
+            // line 단위로 번역
+            for(JsonElement j:arr){
+                JsonArray linesArr = j.getAsJsonObject().get("lines").getAsJsonArray();
+                for(JsonElement lj:linesArr){
+                    JsonObject obj = lj.getAsJsonObject();
+                    box = obj.get("boundingBox").getAsString();
+                    text = "";
+                    JsonArray wordsArr = obj.get("words").getAsJsonArray();
+                    for(JsonElement wj : wordsArr) {
+                        text += wj.getAsJsonObject().get("text").getAsString();
+                        text += " ";
+                    }
+                    Integer[] pos = parseBoundingBox(box);
+                    TextContainer t = new TextContainer(pos[0],pos[1], text);
+                    resultArray.add(t);
+                }
+            }
+
+            //word 단위로 번역
+
+            /*
             for(JsonElement j:arr){
                 JsonArray linesArr = j.getAsJsonObject().get("lines").getAsJsonArray();
                 for(JsonElement lj:linesArr){
@@ -141,8 +164,9 @@ public class OCRApi{
                         resultArray.add(t);
                     }
                 }
+
             }
-            //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            */
             return resultArray;
         }
 
