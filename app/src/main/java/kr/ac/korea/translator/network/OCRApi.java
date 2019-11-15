@@ -120,7 +120,6 @@ public class OCRApi{
         }
 
         private static List<TextContainer> parse(String json_text) {
-            Log.e("test",json_text);
             String text = null;
             String box = null;
             JsonParser parser = new JsonParser();
@@ -141,8 +140,9 @@ public class OCRApi{
                         text += wj.getAsJsonObject().get("text").getAsString();
                         text += " ";
                     }
+                    // Patterns.WEB_URL.matcher(text).matches()
                     Integer[] pos = parseBoundingBox(box);
-                    TextContainer t = new TextContainer(pos[0],pos[1], text);
+                    TextContainer t = new TextContainer(pos, text);
                     resultArray.add(t);
                 }
             }
@@ -171,11 +171,12 @@ public class OCRApi{
         }
 
         private static Integer[] parseBoundingBox(String string){
-            Integer[] rst = new Integer[2];
+            Integer[] rst = new Integer[4];
             try{
                 String[] stringList = string.split(",");
-                rst[0] = Integer.valueOf(stringList[0]);
-                rst[1] = Integer.valueOf(stringList[1]);
+                for(int i=0; i<4; i++){
+                    rst[i] = Integer.valueOf(stringList[i]);
+                }
             }
             catch(Exception e){
                 Log.e("e", e.toString());

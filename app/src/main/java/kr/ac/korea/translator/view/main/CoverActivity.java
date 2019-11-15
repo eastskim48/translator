@@ -68,7 +68,7 @@ public class CoverActivity extends BaseActivity {
     public Detection translateResponse;
     public TextContainer textBox;
     public static int count;
-    public static Detection.Translation translated;
+    public static String translated;
     public static boolean up;
     RelativeLayout container;
     public static String selectedLang;
@@ -138,7 +138,7 @@ public class CoverActivity extends BaseActivity {
     public void createVirtualDisplay() {
         // get width and height
         Point size = new Point();
-        mDisplay.getSize(size);
+        mDisplay.getRealSize(size);
         mWidth = size.x;
         mHeight = size.y;
         // start capture reader
@@ -238,20 +238,26 @@ public class CoverActivity extends BaseActivity {
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     while (count < mResult.size()) {
-                                        if (!up && (translated != null || mResult.get(count).getY() > statusBarHeight)) {
+                                        if(up){
+                                            continue;
+                                        }
+                                        else if(translated != null && mResult.get(count).getY() > statusBarHeight) {
+                                            TextContainer thisRst = mResult.get(count);
                                             TextView textView = new TextView(CoverActivity.this);
-                                            textView.setText(translated.getText());
+                                            textView.setText(translated);
                                             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                            params.setMargins(mResult.get(count).getX(), mResult.get(count).getY() - statusBarHeight, 0, 0);
+                                            params.setMargins(thisRst.getX(), thisRst.getY()-statusBarHeight, 0, 0); //statusBarHeight 빼는 것 없앰
                                             textView.setLayoutParams(params);
                                             textView.setTextColor(Color.WHITE);
+                                            //Set Textsize - Pixel based on height
+                                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, thisRst.getH()+5);
                                             textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
                                             textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
                                             container.addView(textView);
-                                            count++;
-                                            up = true;
                                         }
+                                        count++;
+                                        up = true;
                                     }
                                 }
                             });
@@ -314,16 +320,34 @@ public class CoverActivity extends BaseActivity {
             while (count < mResult.size()) {
                 if (up) {
                     try {
-                        List<Detection> translateResponseList = gson.fromJson(TranslateApi.Translate(mResult.get(count).getRst()), new TypeToken<List<Detection>>() {
+                        String originalTxt = mResult.get(count).getRst();
+                        List<Detection> translateResponseList = gson.fromJson(TranslateApi.Translate(originalTxt), new TypeToken<List<Detection>>() {
                         }.getType());
                         translateResponse = translateResponseList.get(0);
-                        translated = translateResponse.getTranslations().get(0);
+                        // 표시해도 되는 결과인지 check
+                        if(translatedTextCheck(originalTxt)) {
+                            up = false;
+                        }
+                        else{
+                            count++;
+                        }
+
                     } catch (Exception e) {
                         Log.e("error", e.toString());
                     }
-                    up = false;
                 }
             }
+        }
+    }
+
+    public boolean translatedTextCheck(String originalTxt){
+        translated = translateResponse.getTranslations().get(0).getText();
+        // 타겟 언어나 번역되지 않은 언어 거르기
+        if(translateResponse.getDetectedLanguage().getLanguage().equals(getSelecteedLang()) || originalTxt.equals(translated)){
+            return false;
+        }
+        else {
+            return true;
         }
     }
 }
