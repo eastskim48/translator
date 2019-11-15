@@ -166,6 +166,7 @@
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-translate:v2-rev47-1.22.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client-jackson2:1.23.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api:gax:1.28.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:percent-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.auth:google-auth-library-oauth2-http:0.9.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:design-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-28.0.0" level="project" />

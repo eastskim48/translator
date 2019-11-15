@@ -10,7 +10,33 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15a33400-bb59-4a07-a223-5872cc525f36" name="Default" comment="" />
+    <list default="true" id="15a33400-bb59-4a07-a223-5872cc525f36" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_percent_28_0_0.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/highlight_rectangle.xml" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,33 +58,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CoverActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CoverActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="338" column="13" lean-forward="false" selection-start-line="338" selection-start-column="13" selection-end-line="338" selection-end-column="13" />
+            <state relative-caret-position="232">
+              <caret line="217" column="47" lean-forward="true" selection-start-line="217" selection-start-column="47" selection-end-line="217" selection-end-column="47" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2846#2847#0" expanded="true" />
-                <element signature="e#2879#2880#0" expanded="true" />
-                <element signature="e#3427#3585#0" expanded="true" />
-                <element signature="e#3584#3585#0" expanded="true" />
-                <element signature="e#6071#6546#0" expanded="true" />
-                <element signature="e#6545#6546#0" expanded="true" />
-                <element signature="e#6695#6696#0" expanded="true" />
-                <element signature="e#6733#6734#0" expanded="true" />
-                <element signature="e#8460#12318#0" expanded="true" />
-                <element signature="e#8643#8875#0" expanded="true" />
-                <element signature="e#8874#8875#0" expanded="true" />
-                <element signature="e#8974#9291#0" expanded="true" />
-                <element signature="e#9290#9291#0" expanded="true" />
-                <element signature="e#9553#9870#0" expanded="true" />
-                <element signature="e#9869#9870#0" expanded="true" />
-                <element signature="e#10287#12267#0" expanded="true" />
-                <element signature="e#12266#12267#0" expanded="true" />
-                <element signature="e#12317#12318#0" expanded="true" />
-                <element signature="e#13094#13095#0" expanded="true" />
-                <element signature="e#13129#13130#0" expanded="true" />
+                <element signature="e#14507#14508#0" expanded="true" />
+                <element signature="e#14542#14543#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,62 +73,22 @@
       </file>
       <file leaf-file-name="activity_cover.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml">
-          <provider selected="true" editor-type-id="android-designer2">
+          <provider editor-type-id="android-designer2">
             <state />
           </provider>
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="styles.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="58" lean-forward="false" selection-start-line="7" selection-start-column="58" selection-end-line="7" selection-end-column="58" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Detection.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/Detection.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainApplication.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/MainApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/BaseActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+              <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TopService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/service/TopService.java">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="38" column="32" lean-forward="false" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -130,24 +97,63 @@
       <file leaf-file-name="OCRApi.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="142" column="63" lean-forward="false" selection-start-line="142" selection-start-column="63" selection-end-line="142" selection-end-column="63" />
+            <state relative-caret-position="189">
+              <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1629#1630#0" expanded="true" />
-                <element signature="e#1669#1670#0" expanded="true" />
-                <element signature="e#7576#7577#0" expanded="true" />
-                <element signature="e#7640#7641#0" expanded="true" />
+                <element signature="e#1093#1094#0" expanded="true" />
+                <element signature="e#1133#1134#0" expanded="true" />
+                <element signature="e#5593#5594#0" expanded="true" />
+                <element signature="e#5657#5658#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TextContainer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/TextContainer.java">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+            <state relative-caret-position="58">
+              <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3089#3243#0" expanded="true" />
+                <element signature="e#3242#3243#0" expanded="true" />
+                <element signature="e#3343#3538#0" expanded="true" />
+                <element signature="e#3537#3538#0" expanded="true" />
+                <element signature="e#3708#5681#0" expanded="true" />
+                <element signature="e#4261#4533#0" expanded="true" />
+                <element signature="e#4532#4533#0" expanded="true" />
+                <element signature="e#4655#4927#0" expanded="true" />
+                <element signature="e#4926#4927#0" expanded="true" />
+                <element signature="e#5049#5321#0" expanded="true" />
+                <element signature="e#5320#5321#0" expanded="true" />
+                <element signature="e#5443#5654#0" expanded="true" />
+                <element signature="e#5653#5654#0" expanded="true" />
+                <element signature="e#5680#5681#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TopService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/service/TopService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="495">
+              <caret line="53" column="69" lean-forward="false" selection-start-line="53" selection-start-column="62" selection-end-line="53" selection-end-column="69" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="layout_top_service.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_top_service.xml">
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="42" lean-forward="false" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -156,49 +162,89 @@
       <file leaf-file-name="TranslateApi.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="49" column="10" lean-forward="false" selection-start-line="49" selection-start-column="10" selection-end-line="49" selection-end-column="10" />
+            <state relative-caret-position="204">
+              <caret line="45" column="14" lean-forward="false" selection-start-line="45" selection-start-column="14" selection-end-line="45" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_main.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+          <provider selected="true" editor-type-id="android-designer2">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="433">
+              <caret line="370" column="65" lean-forward="false" selection-start-line="370" selection-start-column="65" selection-end-line="370" selection-end-column="65" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#2133#2151#0" expanded="true" />
+                <element signature="e#2549#2568#0" expanded="true" />
+                <element signature="e#2965#2983#0" expanded="true" />
+                <element signature="e#5574#5600#0" expanded="true" />
+                <element signature="e#5985#5999#0" expanded="true" />
+                <element signature="e#9672#9698#0" expanded="true" />
+                <element signature="e#10083#10097#0" expanded="true" />
+                <element signature="e#13820#13851#0" expanded="true" />
+                <element signature="e#14236#14250#0" expanded="true" />
+                <element signature="e#17973#18000#0" expanded="true" />
+                <element signature="e#18385#18400#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="resourceFile" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ImageAvailableListener</find>
-      <find>translations</find>
-      <find>getActi</find>
-      <find>getStatusBarHe</find>
-      <find>statusBarHeight</find>
-      <find>selectedLang</find>
-      <find>pos[0]</find>
-      <find>getX</find>
-      <find>language</find>
-      <find>params</find>
-      <find>textcontainer</find>
-      <find>Tth</find>
-      <find>pos</find>
-      <find>parseB</find>
-      <find>setTextS</find>
-      <find>Log.e</find>
-      <find>getY</find>
-      <find>statusBarH</find>
-      <find>statusBar</find>
-      <find>screenCaptureIntent</find>
-      <find>mProjectionManager</find>
-      <find>mDensity</find>
-      <find>Layout</find>
-      <find>setMargin</find>
-      <find>setTe</find>
-      <find>container</find>
-      <find>onCreate</find>
-      <find>mVirtualDisplay</find>
       <find>statusB</find>
-      <find>translated</find>
+      <find>thread</find>
+      <find>to</find>
+      <find>guide_sele</find>
+      <find>guide_sele80</find>
+      <find>btn</find>
+      <find>layout</find>
+      <find>Detec</find>
+      <find>setvixi</find>
+      <find>onclick</find>
+      <find>checkPermission</find>
+      <find>vOverlay</find>
+      <find>CoverAc</find>
+      <find>state</find>
+      <find>mHandler</find>
+      <find>mRotation</find>
+      <find>getSelectedLang</find>
+      <find>resultTo</find>
+      <find>TranslateCallback</find>
+      <find>parser</find>
+      <find>Log.e</find>
+      <find>map</find>
+      <find>getstatusBar</find>
+      <find>statusBar</find>
+      <find>container</find>
+      <find>getStatusBarHeight</find>
+      <find>statusBarHeight</find>
+      <find>getStatusBarH</find>
+      <find>error</find>
+      <find>ss</find>
     </findStrings>
   </component>
   <component name="GenerateSignedApkSettings">
@@ -2215,12 +2261,17 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/TextContainer.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/highlight.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/highlight_rectangle.xml" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java" />
       </list>
@@ -2288,13 +2339,6 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
               <item name="translator" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="translator" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="translator" type="cbb59c9e:AndroidPsiDirectoryNode" />
               <item name="network" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -2324,26 +2368,7 @@
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
               <item name="translator" type="cbb59c9e:AndroidPsiDirectoryNode" />
               <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="translator" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="translator" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="translator" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="translator" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
             <path>
               <item name="translator" type="1abcf292:AndroidViewProjectNode" />
@@ -2562,12 +2587,12 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32914045" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36477986" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2798742" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15995117" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11949685" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29874215" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2593,114 +2618,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/TextContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="26" column="48" lean-forward="false" selection-start-line="26" selection-start-column="48" selection-end-line="26" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/BaseActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/MainApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1125">
-          <caret line="91" column="44" lean-forward="true" selection-start-line="91" selection-start-column="44" selection-end-line="91" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2846#2847#0" expanded="true" />
-            <element signature="e#2879#2880#0" expanded="true" />
-            <element signature="e#3427#3585#0" expanded="true" />
-            <element signature="e#3584#3585#0" expanded="true" />
-            <element signature="e#6071#6546#0" expanded="true" />
-            <element signature="e#6545#6546#0" expanded="true" />
-            <element signature="e#6695#6696#0" expanded="true" />
-            <element signature="e#6733#6734#0" expanded="true" />
-            <element signature="e#8460#12318#0" expanded="true" />
-            <element signature="e#8643#8875#0" expanded="true" />
-            <element signature="e#8874#8875#0" expanded="true" />
-            <element signature="e#8974#9291#0" expanded="true" />
-            <element signature="e#9290#9291#0" expanded="true" />
-            <element signature="e#9553#9870#0" expanded="true" />
-            <element signature="e#9869#9870#0" expanded="true" />
-            <element signature="e#10287#12267#0" expanded="true" />
-            <element signature="e#12266#12267#0" expanded="true" />
-            <element signature="e#12317#12318#0" expanded="true" />
-            <element signature="e#13094#13095#0" expanded="true" />
-            <element signature="e#13129#13130#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="91" column="10" lean-forward="false" selection-start-line="91" selection-start-column="10" selection-end-line="91" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1629#1630#0" expanded="true" />
-            <element signature="e#1669#1670#0" expanded="true" />
-            <element signature="e#7576#7577#0" expanded="true" />
-            <element signature="e#7640#7641#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="54" column="54" lean-forward="false" selection-start-line="54" selection-start-column="54" selection-end-line="54" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="88" column="43" lean-forward="true" selection-start-line="88" selection-start-column="43" selection-end-line="88" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="26" column="48" lean-forward="false" selection-start-line="26" selection-start-column="48" selection-end-line="26" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/BaseActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -2720,27 +2637,21 @@
         <state relative-caret-position="1650">
           <caret line="159" column="0" lean-forward="false" selection-start-line="159" selection-start-column="0" selection-end-line="159" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2846#2847#0" expanded="true" />
-            <element signature="e#2879#2880#0" expanded="true" />
-            <element signature="e#3427#3585#0" expanded="true" />
-            <element signature="e#3584#3585#0" expanded="true" />
-            <element signature="e#6071#6546#0" expanded="true" />
-            <element signature="e#6545#6546#0" expanded="true" />
-            <element signature="e#6695#6696#0" expanded="true" />
-            <element signature="e#6733#6734#0" expanded="true" />
-            <element signature="e#8460#12318#0" expanded="true" />
-            <element signature="e#8643#8875#0" expanded="true" />
-            <element signature="e#8874#8875#0" expanded="true" />
-            <element signature="e#8974#9291#0" expanded="true" />
-            <element signature="e#9290#9291#0" expanded="true" />
-            <element signature="e#9553#9870#0" expanded="true" />
-            <element signature="e#9869#9870#0" expanded="true" />
-            <element signature="e#10287#12267#0" expanded="true" />
-            <element signature="e#12266#12267#0" expanded="true" />
-            <element signature="e#12317#12318#0" expanded="true" />
-            <element signature="e#13094#13095#0" expanded="true" />
-            <element signature="e#13129#13130#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#2670#2671#0" expanded="false" />
+            <element signature="e#2703#2704#0" expanded="false" />
+            <element signature="e#3279#3437#0" expanded="false" />
+            <element signature="e#3436#3437#0" expanded="false" />
+            <element signature="e#5492#5967#0" expanded="false" />
+            <element signature="e#5966#5967#0" expanded="false" />
+            <element signature="e#6116#6117#0" expanded="false" />
+            <element signature="e#6154#6155#0" expanded="false" />
+            <element signature="e#7881#11116#0" expanded="false" />
+            <element signature="e#8140#8519#0" expanded="false" />
+            <element signature="e#8518#8519#0" expanded="false" />
+            <element signature="e#8993#11065#0" expanded="false" />
+            <element signature="e#11064#11065#0" expanded="false" />
+            <element signature="e#11115#11116#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2757,7 +2668,7 @@
         <state relative-caret-position="390">
           <caret line="40" column="59" lean-forward="false" selection-start-line="40" selection-start-column="59" selection-end-line="40" selection-end-column="59" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2782,10 +2693,10 @@
           <caret line="47" column="23" lean-forward="false" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1629#1630#0" expanded="true" />
-            <element signature="e#1669#1670#0" expanded="true" />
-            <element signature="e#7576#7577#0" expanded="true" />
-            <element signature="e#7640#7641#0" expanded="true" />
+            <element signature="e#1093#1094#0" expanded="true" />
+            <element signature="e#1133#1134#0" expanded="true" />
+            <element signature="e#5593#5594#0" expanded="true" />
+            <element signature="e#5657#5658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2795,27 +2706,21 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2846#2847#0" expanded="true" />
-            <element signature="e#2879#2880#0" expanded="true" />
-            <element signature="e#3427#3585#0" expanded="true" />
-            <element signature="e#3584#3585#0" expanded="true" />
-            <element signature="e#6071#6546#0" expanded="true" />
-            <element signature="e#6545#6546#0" expanded="true" />
-            <element signature="e#6695#6696#0" expanded="true" />
-            <element signature="e#6733#6734#0" expanded="true" />
-            <element signature="e#8460#12318#0" expanded="true" />
-            <element signature="e#8643#8875#0" expanded="true" />
-            <element signature="e#8874#8875#0" expanded="true" />
-            <element signature="e#8974#9291#0" expanded="true" />
-            <element signature="e#9290#9291#0" expanded="true" />
-            <element signature="e#9553#9870#0" expanded="true" />
-            <element signature="e#9869#9870#0" expanded="true" />
-            <element signature="e#10287#12267#0" expanded="true" />
-            <element signature="e#12266#12267#0" expanded="true" />
-            <element signature="e#12317#12318#0" expanded="true" />
-            <element signature="e#13094#13095#0" expanded="true" />
-            <element signature="e#13129#13130#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#2670#2671#0" expanded="false" />
+            <element signature="e#2703#2704#0" expanded="false" />
+            <element signature="e#3279#3437#0" expanded="false" />
+            <element signature="e#3436#3437#0" expanded="false" />
+            <element signature="e#5492#5967#0" expanded="false" />
+            <element signature="e#5966#5967#0" expanded="false" />
+            <element signature="e#6116#6117#0" expanded="false" />
+            <element signature="e#6154#6155#0" expanded="false" />
+            <element signature="e#7881#11116#0" expanded="false" />
+            <element signature="e#8140#8519#0" expanded="false" />
+            <element signature="e#8518#8519#0" expanded="false" />
+            <element signature="e#8993#11065#0" expanded="false" />
+            <element signature="e#11064#11065#0" expanded="false" />
+            <element signature="e#11115#11116#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2897,28 +2802,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="28" lean-forward="false" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-26/android/media/projection/MediaProjectionManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
@@ -2930,14 +2813,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
           <caret line="7865" column="20" lean-forward="false" selection-start-line="7865" selection-start-column="20" selection-end-line="7865" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3494,32 +3369,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="50" column="40" lean-forward="false" selection-start-line="50" selection-start-column="31" selection-end-line="50" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="49" column="10" lean-forward="false" selection-start-line="49" selection-start-column="10" selection-end-line="49" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/TextContainer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -3544,37 +3393,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/Detection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="58" lean-forward="false" selection-start-line="7" selection-start-column="58" selection-end-line="7" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/MainApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/service/TopService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="38" column="32" lean-forward="false" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+        <state relative-caret-position="285">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -3587,55 +3409,237 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/model/Detection.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/common/MainApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state relative-caret-position="45">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/ic_launcher_background.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_menu_black_24dp.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_close_black_24dp.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/highlight.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/highlight_rectangle.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="24" lean-forward="false" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="58" lean-forward="false" selection-start-line="7" selection-start-column="58" selection-end-line="7" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="63" column="52" lean-forward="false" selection-start-line="63" selection-start-column="52" selection-end-line="63" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="35" lean-forward="false" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/border.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/service/TopService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="53" column="69" lean-forward="false" selection-start-line="53" selection-start-column="62" selection-end-line="53" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_top_service.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="42" lean-forward="false" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="433">
+          <caret line="370" column="65" lean-forward="false" selection-start-line="370" selection-start-column="65" selection-end-line="370" selection-end-column="65" />
+          <folding>
+            <element signature="e#2133#2151#0" expanded="true" />
+            <element signature="e#2549#2568#0" expanded="true" />
+            <element signature="e#2965#2983#0" expanded="true" />
+            <element signature="e#5574#5600#0" expanded="true" />
+            <element signature="e#5985#5999#0" expanded="true" />
+            <element signature="e#9672#9698#0" expanded="true" />
+            <element signature="e#10083#10097#0" expanded="true" />
+            <element signature="e#13820#13851#0" expanded="true" />
+            <element signature="e#14236#14250#0" expanded="true" />
+            <element signature="e#17973#18000#0" expanded="true" />
+            <element signature="e#18385#18400#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3089#3243#0" expanded="true" />
+            <element signature="e#3242#3243#0" expanded="true" />
+            <element signature="e#3343#3538#0" expanded="true" />
+            <element signature="e#3537#3538#0" expanded="true" />
+            <element signature="e#3708#5681#0" expanded="true" />
+            <element signature="e#4261#4533#0" expanded="true" />
+            <element signature="e#4532#4533#0" expanded="true" />
+            <element signature="e#4655#4927#0" expanded="true" />
+            <element signature="e#4926#4927#0" expanded="true" />
+            <element signature="e#5049#5321#0" expanded="true" />
+            <element signature="e#5320#5321#0" expanded="true" />
+            <element signature="e#5443#5654#0" expanded="true" />
+            <element signature="e#5653#5654#0" expanded="true" />
+            <element signature="e#5680#5681#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/TranslateApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="45" column="14" lean-forward="false" selection-start-line="45" selection-start-column="14" selection-end-line="45" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/network/OCRApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="142" column="63" lean-forward="false" selection-start-line="142" selection-start-column="63" selection-end-line="142" selection-end-column="63" />
+        <state relative-caret-position="189">
+          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1629#1630#0" expanded="true" />
-            <element signature="e#1669#1670#0" expanded="true" />
-            <element signature="e#7576#7577#0" expanded="true" />
-            <element signature="e#7640#7641#0" expanded="true" />
+            <element signature="e#1093#1094#0" expanded="true" />
+            <element signature="e#1133#1134#0" expanded="true" />
+            <element signature="e#5593#5594#0" expanded="true" />
+            <element signature="e#5657#5658#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/1c44f8e3c13764dd45bc9d92123f123f/res/layout/design_bottom_sheet_dialog.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_cover.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="27" lean-forward="false" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/kr/ac/korea/translator/view/main/CoverActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="338" column="13" lean-forward="false" selection-start-line="338" selection-start-column="13" selection-end-line="338" selection-end-column="13" />
+        <state relative-caret-position="232">
+          <caret line="217" column="47" lean-forward="true" selection-start-line="217" selection-start-column="47" selection-end-line="217" selection-end-column="47" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2846#2847#0" expanded="true" />
-            <element signature="e#2879#2880#0" expanded="true" />
-            <element signature="e#3427#3585#0" expanded="true" />
-            <element signature="e#3584#3585#0" expanded="true" />
-            <element signature="e#6071#6546#0" expanded="true" />
-            <element signature="e#6545#6546#0" expanded="true" />
-            <element signature="e#6695#6696#0" expanded="true" />
-            <element signature="e#6733#6734#0" expanded="true" />
-            <element signature="e#8460#12318#0" expanded="true" />
-            <element signature="e#8643#8875#0" expanded="true" />
-            <element signature="e#8874#8875#0" expanded="true" />
-            <element signature="e#8974#9291#0" expanded="true" />
-            <element signature="e#9290#9291#0" expanded="true" />
-            <element signature="e#9553#9870#0" expanded="true" />
-            <element signature="e#9869#9870#0" expanded="true" />
-            <element signature="e#10287#12267#0" expanded="true" />
-            <element signature="e#12266#12267#0" expanded="true" />
-            <element signature="e#12317#12318#0" expanded="true" />
-            <element signature="e#13094#13095#0" expanded="true" />
-            <element signature="e#13129#13130#0" expanded="true" />
+            <element signature="e#14507#14508#0" expanded="true" />
+            <element signature="e#14542#14543#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

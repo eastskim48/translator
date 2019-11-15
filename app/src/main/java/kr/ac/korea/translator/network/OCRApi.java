@@ -17,43 +17,20 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import kr.ac.korea.translator.model.TextContainer;
 import kr.ac.korea.translator.view.main.CoverActivity;
 
-/*
- * Gson: https://github.com/google/gson
- * Maven info:
- *     groupId: com.google.code.gson
- *     artifactId: gson
- *     version: 2.8.1
- */
-
-/* NOTE: To compile and run this code:
-1. Save this file as Translate.java.
-2. Run:
-    javac Translate.java -cp .;gson-2.8.1.jar -encoding UTF-8
-3. Run:
-    java -cp .;gson-2.8.1.jar Translate
-*/
-
 public class OCRApi{
 
-// **********************************************
-// *** Update or verify the following values. ***
-// **********************************************
 
     // Replace the subscriptionKey string value with your valid subscription key.
     static String subscriptionKey = "c2c8f85aeb454b368f851a6d1e36a6dd";
 
-    static String host = "https://southeastasia.api.cognitive.microsoft.com";
-    static String path = "/vision/v2.0/ocr?detectOrientation=true";
+    static String host = "https://southeastasia.api.cognitive.microsoft.com", path = "/vision/v2.0/ocr?detectOrientation=true";
     static String params;
-
-
 
     public static class RequestBody {
         byte[] data;
@@ -97,12 +74,6 @@ public class OCRApi{
                 inputStream.close();
                 StringBuilder response = new StringBuilder();
 
-                Map<String, List<String>> map = connection.getHeaderFields();
-                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                    Log.e("se", "Key : " + entry.getKey()
-                            + " ,Value : " + entry.getValue());
-                }
-
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
                 String line;
                 while ((line = in.readLine()) != null) {
@@ -120,8 +91,7 @@ public class OCRApi{
         }
 
         private static List<TextContainer> parse(String json_text) {
-            String text = null;
-            String box = null;
+            String text, box = null;
             JsonParser parser = new JsonParser();
             JsonElement json = parser.parse(json_text);
             JsonObject objects = json.getAsJsonObject();
@@ -137,49 +107,21 @@ public class OCRApi{
                     text = "";
                     JsonArray wordsArr = obj.get("words").getAsJsonArray();
                     for(JsonElement wj : wordsArr) {
-                        text += wj.getAsJsonObject().get("text").getAsString();
-                        text += " ";
+                        text += wj.getAsJsonObject().get("text").getAsString() + " ";
                     }
-                    // Patterns.WEB_URL.matcher(text).matches()
                     Integer[] pos = parseBoundingBox(box);
                     TextContainer t = new TextContainer(pos, text);
                     resultArray.add(t);
                 }
             }
-
-            //word 단위로 번역
-
-            /*
-            for(JsonElement j:arr){
-                JsonArray linesArr = j.getAsJsonObject().get("lines").getAsJsonArray();
-                for(JsonElement lj:linesArr){
-                    JsonArray wordsArr = lj.getAsJsonObject().get("words").getAsJsonArray();
-                    for(JsonElement wj : wordsArr){
-                        //url skip 추가해야 함
-                        JsonObject obj = wj.getAsJsonObject();
-                        text = obj.get("text").getAsString();
-                        box = obj.get("boundingBox").getAsString();
-                        Integer[] pos = parseBoundingBox(box);
-                        TextContainer t = new TextContainer(pos[0],pos[1], text);
-                        resultArray.add(t);
-                    }
-                }
-
-            }
-            */
             return resultArray;
         }
 
         private static Integer[] parseBoundingBox(String string){
             Integer[] rst = new Integer[4];
-            try{
-                String[] stringList = string.split(",");
-                for(int i=0; i<4; i++){
-                    rst[i] = Integer.valueOf(stringList[i]);
-                }
-            }
-            catch(Exception e){
-                Log.e("e", e.toString());
+            String[] stringList = string.split(",");
+            for(int i=0; i<4; i++){
+                rst[i] = Integer.valueOf(stringList[i]);
             }
             return rst;
         }
@@ -187,9 +129,7 @@ public class OCRApi{
 
 
     public static void Post (Bitmap imgData, CoverActivity.TranslateCallback callback) throws Exception {
-
         setLanguageParam();
-
         List<RequestBody> objList = new ArrayList<>();
         objList.add(new OCRApi.RequestBody(bitmapToByteArray(imgData)));
         byte[] data = bitmapToByteArray(imgData);
@@ -200,9 +140,9 @@ public class OCRApi{
     public static byte[] bitmapToByteArray( Bitmap $bitmap ) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
         $bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray() ;
-        return byteArray ;
+        return stream.toByteArray();
     }
+
     public static void setLanguageParam(){
         params="&to=" + CoverActivity.getSelecteedLang();
     }

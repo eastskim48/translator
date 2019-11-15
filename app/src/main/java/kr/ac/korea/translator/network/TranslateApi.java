@@ -2,7 +2,6 @@ package kr.ac.korea.translator.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
@@ -16,42 +15,17 @@ import javax.net.ssl.HttpsURLConnection;
 
 import kr.ac.korea.translator.view.main.CoverActivity;
 
-/*
- * Gson: https://github.com/google/gson
- * Maven info:
- *     groupId: com.google.code.gson
- *     artifactId: gson
- *     version: 2.8.1
- */
-
-/* NOTE: To compile and run this code:
-1. Save this file as Translate.java.
-2. Run:
-    javac Translate.java -cp .;gson-2.8.1.jar -encoding UTF-8
-3. Run:
-    java -cp .;gson-2.8.1.jar Translate
-*/
-
 public class TranslateApi {
 
-// **********************************************
-// *** Update or verify the following values. ***
-// **********************************************
-
-    // Replace the subscriptionKey string value with your valid subscription key.
     static String subscriptionKey = "c141a4cbc83b41b7b488f4b2410ce0a3";
-
     static String host = "https://api.cognitive.microsofttranslator.com";
     static String path = "/translate?api-version=3.0";
-
-    // Translate to German and Italian.
     static String params;
+    static Gson gson;
 
-    //static String text = "Hello world!";
 
     public static class RequestBody {
         String Text;
-
         public RequestBody(String text) {
             this.Text = text;
         }
@@ -61,8 +35,7 @@ public class TranslateApi {
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setConnectTimeout(10000);
-        connection.setRequestProperty("Content-Type", "application/json");
-        //connection.setRequestProperty("Content-Length", content.length() + "");
+        connection.setRequestProperty("Content-Type", "application/json");;
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("X-ClientTraceId", java.util.UUID.randomUUID().toString());
@@ -83,19 +56,16 @@ public class TranslateApi {
 
     public static String Translate (String text) throws Exception {
         setLanguageParam();
+        gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
         URL url = new URL (host + path + params);
         List<RequestBody> objList = new ArrayList<RequestBody>();
         objList.add(new RequestBody(text));
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-        String content = gson.toJson(objList);
-        return prettify(Post(url, content));
+        return prettify(Post(url, gson.toJson(objList)));
     }
 
     public static String prettify(String json_text) {
         JsonParser parser = new JsonParser();
-        JsonElement json = parser.parse(json_text);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
+        return gson.toJson(parser.parse(json_text));
     }
     public static void setLanguageParam(){
         params="&to=" + CoverActivity.getSelecteedLang();

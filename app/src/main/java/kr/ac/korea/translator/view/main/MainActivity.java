@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,8 @@ public class MainActivity extends BaseActivity {
 
     private static final Map<String, Integer> m = new LinkedHashMap<>();
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 1;
+    private ConstraintLayout guide_1, guide_2, guide_3, guide_4;
+    private Button guideButton, startButton, stopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +39,13 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         View view = getWindow().getDecorView();
-        m.put("한국어",0);
-        m.put("영어",1);
-        m.put("일본어",2);
-        m.put("중국어",3);
-        m.put("독일어",4);
-        m.put("프랑스어",5);
-        m.put("스페인어",6);
-        m.put("헝가리어",7);
-        m.put("이탈리아어",8);
+
+        // Spinner
+        String[] langList = new String[]{"한국어", "영어", "일본어", "중국어", "독일어", "프랑스어", "스페인어", "헝가리어", "이탈리아어"};
+        for(int i=0; i<langList.length; i++){
+            m.put(langList[i], i);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (view != null) {
                 view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -70,21 +71,72 @@ public class MainActivity extends BaseActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        Button button = (Button)findViewById(R.id.btn_start);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        // Buttons
+        startButton = (Button)findViewById(R.id.btn_start);
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkPermission();
             }
         });
-        Button bt_stop = (Button) findViewById(R.id.btn_stop);
-        bt_stop.setOnClickListener(new View.OnClickListener() {
+        stopButton = (Button) findViewById(R.id.btn_stop);
+        stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
+        setGuideButtons();
     }
+
+    public void setGuideButtons(){
+        Button bt_help = (Button) findViewById(R.id.btn_help);
+        bt_help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guide_1 = (ConstraintLayout)findViewById(R.id.guide_1);
+                guide_2 = (ConstraintLayout)findViewById(R.id.guide_2);
+                guide_3 = (ConstraintLayout)findViewById(R.id.guide_3);
+                guide_4 = (ConstraintLayout)findViewById(R.id.guide_4);
+                guide_1.setVisibility(View.VISIBLE);
+                guideButton = (Button) findViewById(R.id.next_guide_1);
+                guideButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        guide_1.setVisibility(View.INVISIBLE);
+                        guide_2.setVisibility(View.VISIBLE);
+                    }
+                });
+                guideButton = (Button) findViewById(R.id.next_guide_2);
+                guideButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        guide_2.setVisibility(View.INVISIBLE);
+                        guide_3.setVisibility(View.VISIBLE);
+                    }
+                });
+                guideButton = (Button) findViewById(R.id.next_guide_3);
+                guideButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        guide_3.setVisibility(View.INVISIBLE);
+                        guide_4.setVisibility(View.VISIBLE);
+                    }
+                });
+                guideButton = (Button) findViewById(R.id.next_guide_4);
+                guideButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        guide_4.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+            }
+        });
+
+    }
+
     public void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
             if (!Settings.canDrawOverlays(this)) {              // 체크

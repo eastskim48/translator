@@ -50,30 +50,22 @@ import kr.ac.korea.translator.view.common.BaseActivity;
 public class CoverActivity extends BaseActivity {
     private static final String SCREENCAP_NAME = "screencap";
     private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-    private int REQUEST_CODE = 0;
     private MediaProjection mMediaProjection;
     private MediaProjectionManager mProjectionManager;
     private Display mDisplay;
-    private int mDensity;
+    private int mDensity, mRotation, REQUEST_CODE = 0;
     ImageReader mImageReader;
     private OrientationChangeCallback mOrientationChangeCallback;
     private VirtualDisplay mVirtualDisplay;
     private Handler mHandler;
-    public static boolean state;
-    private int mRotation;
-    public static int mWidth;
-    public static int mHeight;
+    public static boolean state, up;
+    public static int mWidth, mHeight, count, statusBarHeight;
     public Context mContext;
     public static List<TextContainer> mResult;
     public Detection translateResponse;
-    public TextContainer textBox;
-    public static int count;
-    public static String translated;
-    public static boolean up;
+    public static String translated, selectedLang;
     RelativeLayout container;
-    public static String selectedLang;
     private static final Map<String, String> m = new LinkedHashMap<>();
-    public int statusBarHeight;
     public ProgressDialog mProgressDialog;
     public Gson gson;
 
@@ -84,34 +76,40 @@ public class CoverActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cover);
-        showProgressDialog();
+
         mContext = this;
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        gson = new Gson();
         state=false;
         mHandler = new Handler();
-        container = (RelativeLayout) findViewById(R.id.container);
+
+        // cover UI 설정
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        container = (RelativeLayout) findViewById(R.id.cover_container);
         container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finishAndRemoveTask();
             }
         });
-        m.put("한국어","ko");
-        m.put("영어","en");
-        m.put("일본어","ja");
-        m.put("중국어","zh-Hans");
-        m.put("독일어","de");
-        m.put("프랑스어","fr");
-        m.put("스페인어","es");
-        m.put("헝가리어","hu");
-        m.put("이탈리아어","it");
+        getStatusBarHeight();
+
+        // lang code 설정
+        String[] langList = new String[]{"한국어", "영어", "일본어", "중국어", "독일어", "프랑스어", "스페인어", "헝가리어", "이탈리아어"};
+        String[] langCodeList = new String[]{"ko", "en", "ja", "zh-Hans", "de", "fr", "es", "hu", "it"};
+        for(int i=0; i<langList.length; i++){
+            m.put(langList[i], langCodeList[i]);
+        }
         SharedPreferences sp = getSharedPreferences("LANG",MODE_PRIVATE);
         selectedLang = m.get(sp.getString("lang","한국어"));
+
+        showProgressDialog();
+
+        //media projection 설정
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
-        gson = new Gson();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
@@ -133,18 +131,6 @@ public class CoverActivity extends BaseActivity {
                 mMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
             }
         }
-    }
-
-    public void createVirtualDisplay() {
-        // get width and height
-        Point size = new Point();
-        mDisplay.getRealSize(size);
-        mWidth = size.x;
-        mHeight = size.y;
-        // start capture reader
-        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888 , 2);
-        mVirtualDisplay = mMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
-        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
     }
 
     public class MediaProjectionStopCallback extends MediaProjection.Callback {
@@ -204,54 +190,44 @@ public class CoverActivity extends BaseActivity {
                     TranslateCallback translateCallback = new TranslateCallback() {
                         @Override
                         public void resultToScreen(List<TextContainer> result) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideProgressDialog();
-                                }
-                            });
-                            if (result == null) {
+                            if (result == null || result.size() == 0) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        hideProgressDialog();
                                         Toast.makeText(getApplicationContext(), "번역할 글자를 찾지 못했습니다", Toast.LENGTH_LONG).show();
                                     }
                                 });
                                 return;
                             }
-                            //params.setMargins <- out of bounds exception 해결 위해 추가
-                            else if (result.size() == 0) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(), "번역할 글자를 찾지 못했습니다", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                                return;
-                            }
+
                             //result : OCR textBox List
                             mResult = result;
                             count = 0;
                             up = true;
                             TranslateThread Tthread = new TranslateThread();
                             Tthread.start();
+
+                            // 이제는 모든 결과가 그냥 한번에 다 표시됨
                             runOnUiThread(new Runnable() {
                                 public void run() {
+                                    TextView textView;
+                                    TextContainer thisRst;
+                                    RelativeLayout.LayoutParams params;
                                     while (count < mResult.size()) {
                                         if(up){
                                             continue;
                                         }
                                         else if(translated != null && mResult.get(count).getY() > statusBarHeight) {
-                                            TextContainer thisRst = mResult.get(count);
-                                            TextView textView = new TextView(CoverActivity.this);
+                                            thisRst = mResult.get(count);
+                                            textView = new TextView(CoverActivity.this);
                                             textView.setText(translated);
-                                            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                             params.setMargins(thisRst.getX(), thisRst.getY()-statusBarHeight, 0, 0); //statusBarHeight 빼는 것 없앰
                                             textView.setLayoutParams(params);
                                             textView.setTextColor(Color.WHITE);
                                             //Set Textsize - Pixel based on height
-                                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, thisRst.getH()+5);
+                                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, thisRst.getH());
                                             textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
                                             textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
                                             container.addView(textView);
@@ -259,6 +235,7 @@ public class CoverActivity extends BaseActivity {
                                         count++;
                                         up = true;
                                     }
+                                    hideProgressDialog();
                                 }
                             });
                         }
@@ -283,34 +260,6 @@ public class CoverActivity extends BaseActivity {
                 if (image != null)
                     image.close();
             }
-        }
-    }
-    public interface TranslateCallback{
-        void resultToScreen(List<TextContainer> result);
-    }
-    public static String getSelecteedLang(){
-        return selectedLang;
-    }
-
-    public void getStatusBarHeight(){
-        Rect rectangle = new Rect();
-        Window window = getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-        statusBarHeight =  rectangle.top;
-    }
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("번역중...");
-            mProgressDialog.setIndeterminate(true);
-        }
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
         }
     }
 
@@ -340,14 +289,56 @@ public class CoverActivity extends BaseActivity {
         }
     }
 
+    public interface TranslateCallback{
+        void resultToScreen(List<TextContainer> result);
+    }
+
+    public void createVirtualDisplay() {
+        // get width and height
+        Point size = new Point();
+        mDisplay.getRealSize(size);
+        mWidth = size.x;
+        mHeight = size.y;
+        // start capture reader
+        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888 , 2);
+        mVirtualDisplay = mMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
+        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+    }
+
+    public void getStatusBarHeight(){
+        Rect rectangle = new Rect();
+        Window window = getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        statusBarHeight =  rectangle.top;
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("번역중...");
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
     public boolean translatedTextCheck(String originalTxt){
         translated = translateResponse.getTranslations().get(0).getText();
         // 타겟 언어나 번역되지 않은 언어 거르기
-        if(translateResponse.getDetectedLanguage().getLanguage().equals(getSelecteedLang()) || originalTxt.equals(translated)){
+        if(translateResponse.getDetectedLanguage().getLanguage().equals(selectedLang) || originalTxt.equals(translated)){
             return false;
         }
         else {
             return true;
         }
+    }
+
+    public static String getSelecteedLang(){
+        return selectedLang;
     }
 }
