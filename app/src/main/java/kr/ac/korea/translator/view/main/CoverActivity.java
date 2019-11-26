@@ -31,10 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,12 +64,15 @@ public class CoverActivity extends BaseActivity {
     public static int mWidth, mHeight, count, statusBarHeight;
     public Context mContext;
     public static List<TextContainer> mResult;
-    public Detection translateResponse;
     public static String translated, selectedLang;
     RelativeLayout container;
     private static final Map<String, String> m = new LinkedHashMap<>();
     public ProgressDialog mProgressDialog;
     public Gson gson;
+    public static String translatePath = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0";
+    static String translateKey, ocrKey;
+    public static URL translateUrl;
+    public JsonParser parser;
 
     public void onDestroy () {
         super.onDestroy();
@@ -81,6 +86,7 @@ public class CoverActivity extends BaseActivity {
         gson = new Gson();
         state=false;
         mHandler = new Handler();
+        parser = new JsonParser();
 
         // cover UI 설정
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -102,6 +108,16 @@ public class CoverActivity extends BaseActivity {
         }
         SharedPreferences sp = getSharedPreferences("LANG",MODE_PRIVATE);
         selectedLang = m.get(sp.getString("lang","한국어"));
+
+        // URL, key 설정
+        try{
+            translateUrl = new URL (translatePath + "&to=" + getSelectedLang());
+        }
+        catch(Exception e){
+            Log.e("translateURL exception", e.toString());
+        }
+        translateKey = getApplicationContext().getString(R.string.translate_key);
+        ocrKey = getApplicationContext().getString(R.string.ocr_key);
 
         showProgressDialog();
 
@@ -241,7 +257,7 @@ public class CoverActivity extends BaseActivity {
                         }
 
                     };
-                    OCRApi.Post(bitmap, translateCallback);
+                    OCRApi.Post(bitmap, translateCallback, ocrKey);
                     mMediaProjection.stop();
                 }
 
@@ -270,11 +286,10 @@ public class CoverActivity extends BaseActivity {
                 if (up) {
                     try {
                         String originalTxt = mResult.get(count).getRst();
-                        List<Detection> translateResponseList = gson.fromJson(TranslateApi.Translate(originalTxt), new TypeToken<List<Detection>>() {
+                        List<Detection> translateResponseList = gson.fromJson(TranslateApi.Translate(originalTxt, translateUrl, translateKey, parser), new TypeToken<List<Detection>>() {
                         }.getType());
-                        translateResponse = translateResponseList.get(0);
                         // 표시해도 되는 결과인지 check
-                        if(translatedTextCheck(originalTxt)) {
+                        if(translatedTextCheck(translateResponseList, originalTxt)) {
                             up = false;
                         }
                         else{
@@ -327,18 +342,21 @@ public class CoverActivity extends BaseActivity {
         }
     }
 
-    public boolean translatedTextCheck(String originalTxt){
-        translated = translateResponse.getTranslations().get(0).getText();
-        // 타겟 언어나 번역되지 않은 언어 거르기
-        if(translateResponse.getDetectedLanguage().getLanguage().equals(selectedLang) || originalTxt.equals(translated)){
+    public boolean translatedTextCheck(List<Detection> translateResponseList, String originalTxt){
+        if(translateResponseList==null){
             return false;
         }
-        else {
-            return true;
+        Detection translateResponse = translateResponseList.get(0);
+        List<Detection.Translation> translations = translateResponse.getTranslations();
+        if(translations == null){
+            return false;
         }
+        translated = translations.get(0).getText();
+        // 타겟 언어나 번역되지 않은 언어 거르기
+        return (!translateResponse.getDetectedLanguage().getLanguage().equals(selectedLang)) && (!originalTxt.equals(translated));
     }
 
-    public static String getSelecteedLang(){
+    public static String getSelectedLang(){
         return selectedLang;
     }
 }

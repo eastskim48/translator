@@ -25,11 +25,7 @@ import kr.ac.korea.translator.view.main.CoverActivity;
 
 public class OCRApi{
 
-
-    // Replace the subscriptionKey string value with your valid subscription key.
-    static String subscriptionKey = "c2c8f85aeb454b368f851a6d1e36a6dd";
-
-    static String host = "https://southeastasia.api.cognitive.microsoft.com", path = "/vision/v2.0/ocr?detectOrientation=true";
+    static String host = "https://koreacentral.api.cognitive.microsoft.com/", path = "/vision/v2.0/ocr?detectOrientation=true";
     static String params;
 
     public static class RequestBody {
@@ -43,10 +39,12 @@ public class OCRApi{
     private static class OCRTask extends AsyncTask<Void, String, String>{
         private byte[] data;
         private CoverActivity.TranslateCallback callback;
+        private String subscriptionKey;
 
-        public OCRTask(byte[] data, CoverActivity.TranslateCallback callback){
+        public OCRTask(byte[] data, CoverActivity.TranslateCallback callback, String key){
             this.data = data;
             this.callback = callback;
+            this.subscriptionKey = key;
         }
         @Override
         protected String doInBackground(Void... v) {
@@ -59,7 +57,7 @@ public class OCRApi{
                 connection.setConnectTimeout(10000); //늘려야 할 수도
                 connection.setRequestProperty("Content-Type", "application/octet-stream");
                 connection.setRequestProperty("Content-Length", dataBytes.length + "");
-                connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
+                connection.setRequestProperty("Ocp-Apim-Subscription-Key", this.subscriptionKey);
                 connection.setRequestMethod("POST");
                 connection.setReadTimeout(10000);
                 OutputStream outputStream = connection.getOutputStream();
@@ -128,12 +126,12 @@ public class OCRApi{
     }
 
 
-    public static void Post (Bitmap imgData, CoverActivity.TranslateCallback callback) throws Exception {
+    public static void Post (Bitmap imgData, CoverActivity.TranslateCallback callback, String key) throws Exception {
         setLanguageParam();
         List<RequestBody> objList = new ArrayList<>();
         objList.add(new OCRApi.RequestBody(bitmapToByteArray(imgData)));
         byte[] data = bitmapToByteArray(imgData);
-        OCRTask ocrTask = new OCRTask(data, callback);
+        OCRTask ocrTask = new OCRTask(data, callback, key);
         ocrTask.execute().get();
     }
 
@@ -144,7 +142,7 @@ public class OCRApi{
     }
 
     public static void setLanguageParam(){
-        params="&to=" + CoverActivity.getSelecteedLang();
+        params="&to=" + CoverActivity.getSelectedLang();
     }
 
 }
