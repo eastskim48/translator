@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity {
         });
 
         // adView
-        MobileAds.initialize(this, getString(R.string.admob_app_id));
+        MobileAds.initialize(this, getApplicationContext().getString(R.string.admob_app_id));
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
