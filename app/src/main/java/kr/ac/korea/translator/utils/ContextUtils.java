@@ -2,7 +2,7 @@ package kr.ac.korea.translator.utils;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.Window;
 import android.view.WindowManager;
 

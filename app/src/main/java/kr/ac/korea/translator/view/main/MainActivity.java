@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,9 +17,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import kr.ac.korea.translator.R;
 import kr.ac.korea.translator.service.TopService;
 import kr.ac.korea.translator.view.common.BaseActivity;
@@ -32,6 +36,7 @@ public class MainActivity extends BaseActivity {
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 1;
     private ConstraintLayout guide_1, guide_2, guide_3, guide_4;
     private Button guideButton, startButton, stopButton;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,12 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        // adView
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         // Buttons
         startButton = (Button)findViewById(R.id.btn_start);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +106,7 @@ public class MainActivity extends BaseActivity {
         bt_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAdView.setVisibility(View.INVISIBLE);
                 guide_1 = (ConstraintLayout)findViewById(R.id.guide_1);
                 guide_2 = (ConstraintLayout)findViewById(R.id.guide_2);
                 guide_3 = (ConstraintLayout)findViewById(R.id.guide_3);
@@ -129,6 +141,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         guide_4.setVisibility(View.INVISIBLE);
+                        mAdView.setVisibility(View.VISIBLE);
                     }
                 });
 
