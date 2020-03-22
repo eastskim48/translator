@@ -2,6 +2,7 @@ package kr.ac.korea.translator.network;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -9,13 +10,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -25,62 +29,55 @@ import kr.ac.korea.translator.view.main.CoverActivity;
 
 public class OCRApi{
 
-    static String host = "https://koreacentral.api.cognitive.microsoft.com/", path = "/vision/v2.0/ocr?detectOrientation=true";
-    static String params;
-
-    public static class RequestBody {
-        byte[] data;
-
-        public RequestBody(byte[] data) {
-            this.data = data;
-        }
-    }
+    static String host = "https://api.ocr.space/parse/image";
 
     private static class OCRTask extends AsyncTask<Void, String, String>{
-        private byte[] data;
+        private String data;
         private CoverActivity.TranslateCallback callback;
-        private String subscriptionKey;
+        private String apiKey;
+        private static JsonObject wordobj;
 
-        public OCRTask(byte[] data, CoverActivity.TranslateCallback callback, String key){
+        public OCRTask(String data, CoverActivity.TranslateCallback callback, String key){
             this.data = data;
             this.callback = callback;
-            this.subscriptionKey = key;
+            this.apiKey = key;
         }
         @Override
         protected String doInBackground(Void... v) {
             List<TextContainer> result = null;
             try {
-                byte[] dataBytes = this.data;
-                URL url = new URL(host + path + params);
+                String encodedData = this.data;
+                URL url = new URL(host);
                 HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setConnectTimeout(10000); //늘려야 할 수도
-                connection.setRequestProperty("Content-Type", "application/octet-stream");
-                connection.setRequestProperty("Content-Length", dataBytes.length + "");
-                connection.setRequestProperty("Ocp-Apim-Subscription-Key", this.subscriptionKey);
                 connection.setRequestMethod("POST");
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
                 connection.setReadTimeout(10000);
-                OutputStream outputStream = connection.getOutputStream();
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(dataBytes);
-                byte[] buffer = new byte[4096];
-                int bytesRead = -1;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
 
-                outputStream.close();
-                inputStream.close();
-                StringBuilder response = new StringBuilder();
+                JSONObject postDataParams = new JSONObject();
+
+                postDataParams.put("apikey", this.apiKey); //TODO Add your Registered API key
+                postDataParams.put("base64Image", "data:image/jpeg;base64," + encodedData);
+                postDataParams.put("language", "eng");
+                postDataParams.put("isOverlayRequired", "true");
+
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                wr.writeBytes(getPostDataString(postDataParams));
+                wr.flush();
+                wr.close();
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-                String line;
-                while ((line = in.readLine()) != null) {
-                    response.append(line);
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null)
+                {
+                    response.append(inputLine);
                 }
                 in.close();
                 result = parse(response.toString());
                 this.callback.resultToScreen(result);
-
             }
             catch (Exception e){
                 Log.e("error", e.toString());
@@ -89,49 +86,66 @@ public class OCRApi{
         }
 
         private static List<TextContainer> parse(String json_text) {
-            String text, box = null;
+            String text = null;
             JsonParser parser = new JsonParser();
-            JsonElement json = parser.parse(json_text);
-            JsonObject objects = json.getAsJsonObject();
-            JsonArray arr = objects.get("regions").getAsJsonArray();
+            JsonObject parsedResult = parser.parse(json_text).getAsJsonObject().get("ParsedResults").getAsJsonArray().get(0).getAsJsonObject();
+            JsonArray lines = parsedResult.get("TextOverlay").getAsJsonObject().get("Lines").getAsJsonArray();
             List<TextContainer> resultArray = new ArrayList<>();
 
             // line 단위로 번역
-            for(JsonElement j:arr){
-                JsonArray linesArr = j.getAsJsonObject().get("lines").getAsJsonArray();
-                for(JsonElement lj:linesArr){
-                    JsonObject obj = lj.getAsJsonObject();
-                    box = obj.get("boundingBox").getAsString();
-                    text = "";
-                    JsonArray wordsArr = obj.get("words").getAsJsonArray();
-                    for(JsonElement wj : wordsArr) {
-                        text += wj.getAsJsonObject().get("text").getAsString() + " ";
-                    }
-                    Integer[] pos = parseBoundingBox(box);
+            for(JsonElement line:lines){
+                // Words 단위 Parsing
+                /*
+                JsonArray words = j.getAsJsonObject().get("Words").getAsJsonArray();
+                for(JsonElement lj:words){
+                    wordobj = lj.getAsJsonObject();
+                    text = wordobj.get("WordText").toString();
+                    Integer[] pos = {getCordVal("Left"), getCordVal("Top"), getCordVal("Width"), getCordVal("Height")};
                     TextContainer t = new TextContainer(pos, text);
                     resultArray.add(t);
                 }
+                */
+                // Line 단위 Parsing
+                JsonObject container = line.getAsJsonObject();
+                text = container.get("LineText").toString();
+                wordobj = container.get("Words").getAsJsonArray().get(0).getAsJsonObject();
+                Integer[] pos = {getCordVal("Left"), getCordVal("Top"), getCordVal("Width"), getCordVal("Height")};
+                TextContainer t = new TextContainer(pos, text);
+                resultArray.add(t);
             }
             return resultArray;
         }
 
-        private static Integer[] parseBoundingBox(String string){
-            Integer[] rst = new Integer[4];
-            String[] stringList = string.split(",");
-            for(int i=0; i<4; i++){
-                rst[i] = Integer.valueOf(stringList[i]);
+        private static Integer getCordVal(String key){
+            return (int)Float.parseFloat(wordobj.get(key).toString());
+        }
+
+        public String getPostDataString(JSONObject params) throws Exception {
+
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            Iterator<String> itr = params.keys();
+
+            while (itr.hasNext()) {
+                String key = itr.next();
+                Object value = params.get(key);
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+                result.append(URLEncoder.encode(key, "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
             }
-            return rst;
+            return result.toString();
         }
     }
 
-
     public static void Post (Bitmap imgData, CoverActivity.TranslateCallback callback, String key) throws Exception {
-        setLanguageParam();
-        List<RequestBody> objList = new ArrayList<>();
-        objList.add(new OCRApi.RequestBody(bitmapToByteArray(imgData)));
         byte[] data = bitmapToByteArray(imgData);
-        OCRTask ocrTask = new OCRTask(data, callback, key);
+        String encoded = Base64.encodeToString(data, Base64.NO_WRAP);
+        OCRTask ocrTask = new OCRTask(encoded, callback, key);
         ocrTask.execute().get();
     }
 
@@ -140,9 +154,4 @@ public class OCRApi{
         $bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
     }
-
-    public static void setLanguageParam(){
-        params="&to=" + CoverActivity.getSelectedLang();
-    }
-
 }
