@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="arr_languages">
-        <item >한국어</item>
         <item >영어</item>
         <item >일본어</item>
         <item >중국어</item>
@@ -10,5 +9,15 @@
         <item >스페인어</item>
         <item >헝가리어</item>
         <item >이탈리아어</item>
+    </string-array>
+    <string-array name="arr_language_codes">
+        <item >eng</item>
+        <item >jpn</item>
+        <item >chs</item>
+        <item >ger</item>
+        <item >fre</item>
+        <item >spa</item>
+        <item >hun</item>
+        <item >ita</item>
     </string-array>
 </resources>

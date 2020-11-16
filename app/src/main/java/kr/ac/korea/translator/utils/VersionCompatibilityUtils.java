@@ -2,11 +2,12 @@ package kr.ac.korea.translator.utils;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.core.content.ContextCompat;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class ContextUtils {
+import androidx.core.content.ContextCompat;
+
+public class VersionCompatibilityUtils {
 
     public static void setStatusColor(Context context, Window window, int color) {
 

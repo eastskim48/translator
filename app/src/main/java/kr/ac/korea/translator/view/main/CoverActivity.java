@@ -3,7 +3,6 @@ package kr.ac.korea.translator.view.main;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -31,16 +30,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import kr.ac.korea.translator.R;
 import kr.ac.korea.translator.model.Detection;
@@ -63,16 +58,14 @@ public class CoverActivity extends BaseActivity {
     public static boolean state, up;
     public static int mWidth, mHeight, count, statusBarHeight;
     public Context mContext;
-    public static List<TextContainer> mResult;
-    public static String translated, selectedLang;
+    public static List<TextContainer> ocrResult;
+    public String translated;
     RelativeLayout container;
-    private static final Map<String, String> m = new LinkedHashMap<>();
     public ProgressDialog mProgressDialog;
     public Gson gson;
-    public static String translatePath = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0";
-    static String translateKey, ocrKey;
-    public static URL translateUrl;
-    public JsonParser parser;
+    public TranslateApi translateApi;
+    public OCRApi ocrApi;
+    TranslateThread translateThread;
 
     public void onDestroy () {
         super.onDestroy();
@@ -81,14 +74,11 @@ public class CoverActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cover);
-
         mContext = this;
         gson = new Gson();
-        state=false;
+        state = false;
         mHandler = new Handler();
-        parser = new JsonParser();
-
-        // cover UI 설정
+        // Set cover UI
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         container = (RelativeLayout) findViewById(R.id.cover_container);
@@ -98,38 +88,18 @@ public class CoverActivity extends BaseActivity {
                 finishAndRemoveTask();
             }
         });
-        getStatusBarHeight();
-
-        // lang code 설정
-        String[] langList = new String[]{"한국어", "영어", "일본어", "중국어", "독일어", "프랑스어", "스페인어", "헝가리어", "이탈리아어"};
-        String[] langCodeList = new String[]{"ko", "en", "ja", "zh-Hans", "de", "fr", "es", "hu", "it"};
-        for(int i=0; i<langList.length; i++){
-            m.put(langList[i], langCodeList[i]);
-        }
-        SharedPreferences sp = getSharedPreferences("LANG",MODE_PRIVATE);
-        selectedLang = m.get(sp.getString("lang","한국어"));
-
-        // URL, key 설정
-        try{
-            translateUrl = new URL (translatePath + "&to=" + getSelectedLang());
-        }
-        catch(Exception e){
-            Log.e("translateURL exception", e.toString());
-        }
-        translateKey = getApplicationContext().getString(R.string.translate_key);
-        ocrKey = getApplicationContext().getString(R.string.ocr_key);
-
         showProgressDialog();
 
-        //media projection 설정
+        // Set media projection
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        setStatusBarHeight();
         if (requestCode == REQUEST_CODE) {
-            getStatusBarHeight();
+            //setStatusBarHeight();
             mMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
             if (mMediaProjection != null) {
                 // display metrics
@@ -139,7 +109,7 @@ public class CoverActivity extends BaseActivity {
                 // create virtual display depending on device width / height
                 createVirtualDisplay();
                 // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(this);
+                mOrientationChangeCallback = new OrientationChangeCallback(CoverActivity.this);
                 if (mOrientationChangeCallback.canDetectOrientation()) {
                     mOrientationChangeCallback.enable();
                 }
@@ -192,9 +162,10 @@ public class CoverActivity extends BaseActivity {
             Image image = null;
             FileOutputStream fos = null;
             Bitmap bitmap = null;
+            ocrApi = new OCRApi(mContext);
             try {
                 image = reader.acquireLatestImage();
-                if (image != null&&!CoverActivity.state) {
+                if (image != null && !CoverActivity.state) {
                     CoverActivity.state = true;
                     android.media.Image.Plane[] planes = image.getPlanes();
                     ByteBuffer buffer = planes[0].getBuffer();
@@ -218,35 +189,19 @@ public class CoverActivity extends BaseActivity {
                             }
 
                             //result : OCR textBox List
-                            mResult = result;
+                            ocrResult = result;
                             count = 0;
                             up = true;
-                            TranslateThread Tthread = new TranslateThread();
-                            Tthread.start();
+                            translateThread = new TranslateThread();
+                            translateThread.start();
 
                             // 이제는 모든 결과가 그냥 한번에 다 표시됨
                             runOnUiThread(new Runnable() {
                                 public void run() {
-                                    TextView textView;
-                                    TextContainer thisRst;
-                                    RelativeLayout.LayoutParams params;
-                                    while (count < mResult.size()) {
-                                        if(up){
-                                            continue;
-                                        }
-                                        else if(translated != null && mResult.get(count).getY() > statusBarHeight) {
-                                            thisRst = mResult.get(count);
-                                            textView = new TextView(CoverActivity.this);
-                                            textView.setText(translated);
-                                            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                            params.setMargins(thisRst.getX(), thisRst.getY()-statusBarHeight, 0, 0); //statusBarHeight 빼는 것 없앰
-                                            textView.setLayoutParams(params);
-                                            textView.setTextColor(Color.WHITE);
-                                            //Set Textsize - Pixel based on height
-                                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, thisRst.getH());
-                                            textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
-                                            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                                            container.addView(textView);
+                                    while (count < ocrResult.size()) {
+                                        if(up) continue;
+                                        if(translated != null && ocrResult.get(count).getY() > statusBarHeight) {
+                                            container.addView(createTextView(ocrResult.get(count)));
                                         }
                                         count++;
                                         up = true;
@@ -257,7 +212,7 @@ public class CoverActivity extends BaseActivity {
                         }
 
                     };
-                    OCRApi.Post(bitmap, translateCallback, ocrKey);
+                    ocrApi.Post(bitmap, translateCallback);
                     mMediaProjection.stop();
                 }
 
@@ -277,19 +232,33 @@ public class CoverActivity extends BaseActivity {
                     image.close();
             }
         }
+        public TextView createTextView(TextContainer thisRst){
+            TextView textView = new TextView(CoverActivity.this);
+            textView.setText(translated);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(thisRst.getX(), thisRst.getY()-statusBarHeight, 0, 0); //statusBarHeight 빼는 것 없앰
+            textView.setLayoutParams(params);
+            textView.setTextColor(Color.WHITE);
+            //Set Textsize - Pixel based on height
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, thisRst.getH());
+            textView.setBackgroundColor(getResources().getColor(R.color.transparentBlack));
+            textView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            return textView;
+        }
     }
 
     class TranslateThread extends Thread{
         @Override
         public void run() {
-            while (count < mResult.size()) {
+            translateApi = new TranslateApi(mContext);
+            while (count < ocrResult.size()) {
                 if (up) {
                     try {
-                        String originalTxt = mResult.get(count).getRst();
-                        List<Detection> translateResponseList = gson.fromJson(TranslateApi.Translate(originalTxt, translateUrl, translateKey, parser), new TypeToken<List<Detection>>() {
+                        String originalTxt = ocrResult.get(count).getRst();
+                        List<Detection> translateResponseList = gson.fromJson(translateApi.Translate(originalTxt), new TypeToken<List<Detection>>() {
                         }.getType());
                         // 표시해도 되는 결과인지 check
-                        if(translatedTextCheck(translateResponseList, originalTxt)) {
+                        if(checkIfCorrectlyTranslated(translateResponseList, originalTxt)) {
                             up = false;
                         }
                         else{
@@ -320,7 +289,7 @@ public class CoverActivity extends BaseActivity {
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
     }
 
-    public void getStatusBarHeight(){
+    public void setStatusBarHeight(){
         Rect rectangle = new Rect();
         Window window = getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
@@ -329,7 +298,7 @@ public class CoverActivity extends BaseActivity {
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog = new ProgressDialog(CoverActivity.this);
             mProgressDialog.setMessage("번역중...");
             mProgressDialog.setIndeterminate(true);
         }
@@ -342,7 +311,7 @@ public class CoverActivity extends BaseActivity {
         }
     }
 
-    public boolean translatedTextCheck(List<Detection> translateResponseList, String originalTxt){
+    public boolean checkIfCorrectlyTranslated(List<Detection> translateResponseList, String originalTxt){
         if(translateResponseList==null){
             return false;
         }
@@ -353,10 +322,6 @@ public class CoverActivity extends BaseActivity {
         }
         translated = translations.get(0).getText();
         // 타겟 언어나 번역되지 않은 언어 거르기
-        return (!translateResponse.getDetectedLanguage().getLanguage().equals(selectedLang)) && (!originalTxt.equals(translated));
-    }
-
-    public static String getSelectedLang(){
-        return selectedLang;
+        return (!translateResponse.getDetectedLanguage().getLanguage().equals("ko")) && (!originalTxt.equals(translated));
     }
 }

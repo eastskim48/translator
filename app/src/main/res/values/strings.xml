@@ -1,12 +1,7 @@
 <resources>
     <string name="app_name">화면번역기</string>
 
-    <string name="admob_app_id">ca-app-pub-2440362810990483~9576468272</string>
-
-    <string name="banner_ad_unit_id">ca-app-pub-2440362810990483/2708927155</string>
-    <string name="banner_ad_unit_test_id">ca-app-pub-3940256099942544/6300978111</string>
-
-    <string name="lang_select">다음 언어로 번역하기</string>
+    <string name="lang_select">인식할 언어 선택</string>
 
     <string name="btn_start">시작</string>
     <string name="btn_stop">종료</string>

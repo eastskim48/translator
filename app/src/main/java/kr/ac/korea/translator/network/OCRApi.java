@@ -1,5 +1,6 @@
 package kr.ac.korea.translator.network;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Base64;
@@ -24,45 +25,54 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import kr.ac.korea.translator.R;
 import kr.ac.korea.translator.model.TextContainer;
+import kr.ac.korea.translator.utils.TargetLanguageSelectorUtils;
 import kr.ac.korea.translator.view.main.CoverActivity;
 
 public class OCRApi{
 
-    static String host = "https://api.ocr.space/parse/image";
+    static URL url;
+    static String key;
+    static String languageToRecognize;
+
+    public OCRApi(Context context){
+        try {
+            url = new URL(context.getString(R.string.ocr_api_path));
+        }
+        catch(Exception e){
+            Log.e("OCR URL exception", e.toString());
+        }
+        key = context.getString(R.string.ocr_key);
+        languageToRecognize = TargetLanguageSelectorUtils.getSavedTargetLanguageCode(context);
+    }
 
     private static class OCRTask extends AsyncTask<Void, String, String>{
         private String data;
         private CoverActivity.TranslateCallback callback;
         private String apiKey;
+        private String languageToRecognize;
         private static JsonObject wordobj;
 
-        public OCRTask(String data, CoverActivity.TranslateCallback callback, String key){
+        public OCRTask(String data, CoverActivity.TranslateCallback callback, String key, String languageToRecognize){
             this.data = data;
             this.callback = callback;
             this.apiKey = key;
+            this.languageToRecognize = languageToRecognize;
         }
         @Override
         protected String doInBackground(Void... v) {
             List<TextContainer> result = null;
             try {
                 String encodedData = this.data;
-                URL url = new URL(host);
-                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                connection.setDoOutput(true);
-                connection.setConnectTimeout(10000); //늘려야 할 수도
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-                connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-                connection.setReadTimeout(10000);
 
                 JSONObject postDataParams = new JSONObject();
 
                 postDataParams.put("apikey", this.apiKey); //TODO Add your Registered API key
                 postDataParams.put("base64Image", "data:image/jpeg;base64," + encodedData);
-                postDataParams.put("language", "eng");
+                postDataParams.put("language", languageToRecognize);
                 postDataParams.put("isOverlayRequired", "true");
-
+                HttpsURLConnection connection = setConnection();
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(getPostDataString(postDataParams));
                 wr.flush();
@@ -83,6 +93,23 @@ public class OCRApi{
                 Log.e("error", e.toString());
             }
             return null;
+        }
+
+        private HttpsURLConnection setConnection(){
+            HttpsURLConnection connection = null;
+            try {
+                connection = (HttpsURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setConnectTimeout(10000); //늘려야 할 수도
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+                connection.setReadTimeout(10000);
+            }
+            catch(Exception e){
+                Log.e("OCR setConnection excep", e.toString());
+            }
+            return connection;
         }
 
         private static List<TextContainer> parse(String json_text) {
@@ -142,10 +169,10 @@ public class OCRApi{
         }
     }
 
-    public static void Post (Bitmap imgData, CoverActivity.TranslateCallback callback, String key) throws Exception {
+    public void Post (Bitmap imgData, CoverActivity.TranslateCallback callback) throws Exception {
         byte[] data = bitmapToByteArray(imgData);
         String encoded = Base64.encodeToString(data, Base64.NO_WRAP);
-        OCRTask ocrTask = new OCRTask(encoded, callback, key);
+        OCRTask ocrTask = new OCRTask(encoded, callback, key, languageToRecognize);
         ocrTask.execute().get();
     }
 
