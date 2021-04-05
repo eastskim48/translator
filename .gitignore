@@ -4,3 +4,5 @@ Key
 app/release/
 .idea/
 .gradle/
+app/src/main/res/values/keys.xml
+
